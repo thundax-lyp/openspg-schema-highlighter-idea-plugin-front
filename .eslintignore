@@ -8,7 +8,6 @@
 .local
 dist
 node_modules
-Dockerfile
 /public
 /docs
 /bin
