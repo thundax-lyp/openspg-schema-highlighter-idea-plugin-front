@@ -1,0 +1,48 @@
+import { defineConfig, loadEnv } from 'vite'
+import { resolve } from 'path'
+import react from '@vitejs/plugin-react-swc'
+
+
+export default defineConfig(({mode}) => {
+	const {VITE_PUBLIC_PATH} = loadEnv(mode, process.cwd(), "");
+	return {
+		plugins: [
+			react(),
+		],
+		build: {
+			outDir: 'dist'
+		},
+		resolve: {
+			alias: {
+				'@': resolve(__dirname, './src'),
+			},
+		},
+		css: {
+			modules: {
+				// localsConvention: 'dashesOnly'
+				localsConvention: (x) => x
+			},
+			preprocessorOptions: {
+				less: {
+					modifyVars: {
+						// hack: `true; @import (reference) "${resolve('src/styles/index.less')}";`,
+					},
+					javascriptEnabled: true
+				}
+			}
+		},
+		server: {
+			host: '0.0.0.0',
+			port: 9000,
+			proxy: {
+				'/openspg-schema/': {
+					target: 'http://127.0.0.1:19994/',
+					changeOrigin: true,
+					secure: false,
+					ws: true,
+				},
+			},
+		},
+		base: `${VITE_PUBLIC_PATH}`
+	}
+})
