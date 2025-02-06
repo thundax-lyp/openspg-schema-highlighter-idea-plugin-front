@@ -1,7 +1,12 @@
-import * as debugData from "./sample.json"
 import { Schema, SchemaEntity } from "./types"
 
-const API_PREFIX = `/puccini-boheme/api`
+const API_PREFIX = `/openspg/api`
+
+interface ResponseWrapper {
+	code: number
+	message: string
+	data: SchemaResponse
+}
 
 interface SchemaResponse {
 	namespace?: NamespaceResponse
@@ -60,13 +65,16 @@ const normalizeEntityResponse = ({name, aliasName, types, properties}: EntityRes
 
 
 export const requestSchema = async (): Promise<Schema> => {
-	// const response = await request.post<Array<any>>(`${API_PREFIX}/knowledge-base/page`)
-	// return Promise.resolve(response['records'])
+	const response = await fetch(`${API_PREFIX}/schema/fetch`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({})
+	})
 
-	const {namespace} = debugData
-	const entities = debugData.entities.map(x => ({...x}))
-	// entities[4].name = `${entities[4].name}-${new Date()}`
-
+	const responseBody: ResponseWrapper = await response.json()
+	const {namespace = {}, entities = []} = responseBody.data
 	return Promise.resolve({
 		namespace: {
 			value: namespace.value
@@ -74,7 +82,6 @@ export const requestSchema = async (): Promise<Schema> => {
 		entities: entities.map((x, index) => normalizeEntityResponse(x, index)).filter(x => x)
 	})
 }
-
 
 export default {
 	requestSchema,

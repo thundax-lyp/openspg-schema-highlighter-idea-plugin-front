@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React, { memo, ReactNode } from 'react';
 
 import { Handle, type Node, type NodeProps, Position } from '@xyflow/react';
-import FunctionIcon from "./FunctionIcon";
-import { SchemaEntity } from "@/pages/schema-diagram/types";
+import { SchemaEntity } from "../types";
+import { ConceptIcon, EntityIcon, EventIcon, FloatIcon, IntegerIcon, SchemaEntityIcon, StringIcon } from "./icons";
 
 export type TurboNodeData = {
 	entity?: SchemaEntity
@@ -10,33 +10,37 @@ export type TurboNodeData = {
 	height?: number
 };
 
+const TYPE_ICONS: {
+	[key: string]: ReactNode
+} = {
+	'ConceptType': <ConceptIcon/>,
+	'EntityType': <EntityIcon/>,
+	'EventType': <EventIcon/>,
+	'Float': <FloatIcon/>,
+	'Integer': <IntegerIcon/>,
+	'String': <StringIcon/>,
+}
+
 const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 	const {entity = {}} = props.data;
-	// console.log(entity.types)
+	const builtinTypes = (entity.types || []).filter(x => Object.keys(TYPE_ICONS).includes(x))
+
 	return (
 		<>
 			<div className="clouds">
-				<div className="cloud gradient">
-					<div>
-						<FunctionIcon/>
+				{builtinTypes.map((type, idx) => {
+					return <div className="cloud gradient" key={idx}>
+						<div>
+							{TYPE_ICONS[type]}
+						</div>
 					</div>
-				</div>
-				<div className="cloud gradient">
-					<div>
-						<FunctionIcon/>
-					</div>
-				</div>
-				<div className="cloud gradient">
-					<div>
-						<FunctionIcon/>
-					</div>
-				</div>
+				})}
 			</div>
 			<div className="wrapper gradient">
 				<div className="inner">
 					<div className="body">
 						<div className="icon">
-							<FunctionIcon/>
+							<SchemaEntityIcon/>
 						</div>
 						<div>
 							<div className="title">{entity.name}</div>
