@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { ConnectionLineType, Controls, type Edge, type Node, ReactFlow, useEdgesState, useNodesState, } from '@xyflow/react';
+import React, { useEffect, useState } from 'react';
+import { ConnectionLineType, Controls, type Edge, type Node, ReactFlow, ReactFlowInstance, useEdgesState, useNodesState } from '@xyflow/react';
 import dagre from '@dagrejs/dagre';
 
 import TurboNode, { type TurboNodeData } from './TurboNode';
 import TurboEdge, { TurboEdgeData } from './TurboEdge';
-
+import { DownloadIcon } from "./icons";
 import { SchemaEntity } from "@/pages/schema-diagram/types";
 
 import '@xyflow/react/dist/base.css';
@@ -12,7 +12,16 @@ import './turbo.css'
 
 export type Direction = 'TB' | 'LR' | 'RL' | 'BT';
 
-const layoutElements = (nodes: Node<TurboNodeData>[], edges: Edge[], direction: Direction = 'TB'): Array<Node<TurboNodeData>> => {
+const layoutElements = (
+	{
+		nodes = [],
+		edges = [],
+		direction = 'TB',
+	}: {
+		nodes: Array<Node<TurboNodeData>>
+		edges: Array<Edge>
+		direction: Direction
+	}): Array<Node<TurboNodeData>> => {
 	const isHorizontal = direction === 'LR';
 
 	const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
@@ -73,17 +82,27 @@ const TurboFlow = (props: TurboFlowProps) => {
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node<TurboNodeData>>([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
 
+	const [reactFlow, setReactFlow] = useState<ReactFlowInstance>();
+
+	//call fitView() after nodes have been initialized, this fitting run only once
+	const [initialized, setInitialized] = useState<boolean>(false);
+
+	const handleSave = () => {
+		console.log("onSave")
+	}
+
+	// initialize nodes and edges
 	useEffect(() => {
-		const normalizedNodes: Node<TurboNodeData>[] = []
-		const normalizedEdges: Edge<TurboEdgeData>[] = []
-		const additionalEdges: Edge<TurboEdgeData>[] = []
+		const normalizedNodes: Array<Node<TurboNodeData>> = []
+		const normalizedEdges: Array<Edge<TurboEdgeData>> = []
+		const additionalEdges: Array<Edge<TurboEdgeData>> = []
 
 		initialEntities.forEach(entity => {
 			const {id = ''} = entity
 			if (!normalizedNodes.find(x => x.id === id)) {
 				const normalizedNode: Node<TurboNodeData> = {
 					id, position: {x: 0, y: 0}, type: 'turbo', data: {
-						entity
+						entity,
 					},
 				}
 				const cachedNode = nodes.find(x => x.id === id)
@@ -110,10 +129,11 @@ const TurboFlow = (props: TurboFlowProps) => {
 			})
 		})
 
-		setNodes(layoutElements(normalizedNodes, normalizedEdges, 'LR'));
+		setNodes(layoutElements({nodes: normalizedNodes, edges: normalizedEdges, direction: 'LR'}));
 		setEdges([...normalizedEdges, ...additionalEdges])
 	}, [initialEntities]);
 
+	// recalculate node position after HTML elements rendered
 	useEffect(() => {
 		let dirty = false
 		const newNodes = nodes.map(node => {
@@ -131,9 +151,20 @@ const TurboFlow = (props: TurboFlowProps) => {
 		})
 
 		if (dirty) {
-			setNodes(layoutElements(newNodes, edges, 'LR'));
+			setNodes(layoutElements({nodes: newNodes, edges, direction: 'LR'}));
+			setInitialized(true)
 		}
 	}, [nodes])
+
+	// auto-fitting layout
+	useEffect(() => {
+		if (initialized && reactFlow) {
+			console.log('run fitView')
+			reactFlow.fitView({
+				nodes: nodes.map(({id}) => ({id}))
+			}).then(x => x)
+		}
+	}, [initialized, reactFlow]);
 
 	return (
 		<div className="schema-diagram">
@@ -143,10 +174,9 @@ const TurboFlow = (props: TurboFlowProps) => {
 					edges={edges}
 					onNodesChange={onNodesChange}
 					onEdgesChange={onEdgesChange}
-					// onConnect={onConnect}
-					// onInit={(x) => setReactFlow(x)}
 					connectionLineType={ConnectionLineType.SmoothStep}
-					fitView
+					onInit={(x) => setReactFlow(x)}
+					fitView={false}
 					nodeTypes={{
 						turbo: TurboNode,
 					}}
@@ -158,7 +188,11 @@ const TurboFlow = (props: TurboFlowProps) => {
 						markerEnd: 'edge-circle',
 					}}
 				>
-					<Controls showInteractive={false} position="top-left"/>
+					<Controls showInteractive={true} position="bottom-right">
+						{/*<button type="button" className="react-flow__controls-button" title="save as image" aria-label="save as image" onClick={() => handleSave()}>*/}
+						{/*	<DownloadIcon/>*/}
+						{/*</button>*/}
+					</Controls>
 					<svg>
 						<defs>
 							<linearGradient id="edge-gradient">

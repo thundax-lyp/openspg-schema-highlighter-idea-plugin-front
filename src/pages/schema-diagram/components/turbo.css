@@ -17,11 +17,8 @@
 }
 
 .react-flow {
-	--bg-color: rgb(17, 17, 17);
-	--text-color: rgb(243, 244, 246);
 	--node-border-radius: 10px;
-	--node-box-shadow: 10px 0 15px rgba(42, 138, 246, 0.3),
-	-10px 0 15px rgba(233, 42, 103, 0.3);
+	--node-box-shadow: 10px 0 15px rgba(42, 138, 246, 0.3), -10px 0 15px rgba(233, 42, 103, 0.3);
 	background-color: var(--bg-color);
 	color: var(--text-color);
 }
@@ -29,7 +26,6 @@
 .react-flow__node-turbo {
 	border-radius: var(--node-border-radius);
 	display: flex;
-	/*height: 70px;*/
 	min-width: 150px;
 	font-family: "Fira Mono", Monospace;
 	font-weight: 500;
@@ -37,7 +33,7 @@
 	box-shadow: var(--node-box-shadow);
 }
 
-.react-flow__node-turbo .wrapper {
+.react-flow__node-turbo .turbo-body-wrapper {
 	overflow: hidden;
 	display: flex;
 	padding: 2px;
@@ -51,24 +47,17 @@
 	position: absolute;
 	padding-bottom: calc(100% * 1.41421356237);
 	width: calc(100% * 1.41421356237);
-	background: conic-gradient(from -160deg at 50% 50%,
-	#e92a67 0deg,
-	#a853ba 120deg,
-	#2a8af6 240deg,
-	#e92a67 360deg);
+	height: calc(100% * 1.41421356237);
+	background: conic-gradient(from -160deg at 50% 50%, #e92a67 0deg, #a853ba 120deg, #2a8af6 240deg, #e92a67 360deg);
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
 	border-radius: 100%;
 }
 
-.react-flow__node-turbo.selected .wrapper.gradient:before {
+.react-flow__node-turbo.selected .turbo-body-wrapper.gradient:before {
 	content: "";
-	background: conic-gradient(from -160deg at 50% 50%,
-	#e92a67 0deg,
-	#a853ba 120deg,
-	#2a8af6 240deg,
-	rgba(42, 138, 246, 0) 360deg);
+	background: conic-gradient(from -160deg at 50% 50%, #e92a67 0deg, #a853ba 120deg, #2a8af6 240deg, rgba(42, 138, 246, 0) 360deg);
 	animation: spinner 4s linear infinite;
 	transform: translate(-50%, -50%) rotate(0deg);
 	z-index: -1;
@@ -95,22 +84,142 @@
 	margin-right: 8px;
 }
 
-.react-flow__node-turbo .body {
+.react-flow__node-turbo .turbo-body {
 	display: flex;
+	flex-direction: column;
 }
 
-.react-flow__node-turbo .title {
+.react-flow__node-turbo .turbo-title {
 	font-size: 16px;
 	margin-bottom: 2px;
 	line-height: 1;
+	color: var(--text-color);
 }
 
-.react-flow__node-turbo .subtitle {
+.react-flow__node-turbo .turbo-subtitle {
 	font-size: 12px;
-	color: #777777;
+	color: rgb(from var(--text-color) r g b / calc(alpha - .3));
+	opacity: 0.5;
 }
 
-.react-flow__node-turbo .clouds {
+
+.react-flow__node-turbo .turbo-properties-container {
+	display: flex;
+	flex-direction: column;
+	margin-top: 4px;
+	border-top: solid 1px rgb(from var(--text-color) r g b / calc(alpha - .7));
+}
+
+.react-flow__node-turbo .turbo-property {
+	display: flex;
+	flex-direction: row;
+	padding: 4px 0;
+	align-items: baseline;
+}
+
+.react-flow__node-turbo .turbo-property > div + div {
+	padding-left: 4px;
+}
+
+.react-flow__node-turbo .turbo-property-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.react-flow__node-turbo .turbo-property-icon svg {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 4px;
+}
+
+.react-flow__node-turbo .turbo-property-title {
+	font-size: 16px;
+	color: var(--entity-name-color);
+}
+
+.react-flow__node-turbo .turbo-property-subtitle {
+	font-size: 12px;
+	color: var(--entity-alias-color);
+}
+
+.react-flow__node-turbo .turbo-property-types {
+	display: flex;
+	flex-direction: row;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.react-flow__node-turbo .turbo-property-type:hover {
+	/*font-size: 16px;*/
+}
+
+.react-flow__node-turbo .turbo-property-type + .turbo-property-type {
+	padding-left: 4px;
+	color: var(--entity-reference-color);
+}
+
+.react-flow__node-turbo .turbo-property-type.builtin {
+	color: var(--keyword-color);
+}
+
+.react-flow__node-turbo .turbo-relations-container {
+	display: flex;
+	flex-direction: column;
+	margin-top: 4px;
+	border-top: solid 1px rgb(from var(--text-color) r g b / calc(alpha - .7));
+}
+
+.react-flow__node-turbo .turbo-relation {
+	display: flex;
+	flex-direction: row;
+	padding: 4px 0;
+	align-items: baseline;
+}
+
+.react-flow__node-turbo .turbo-relation > div + div {
+	padding-left: 4px;
+}
+
+.react-flow__node-turbo .turbo-relation-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.react-flow__node-turbo .turbo-relation-icon svg {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 4px;
+}
+
+.react-flow__node-turbo .turbo-relation-title {
+	font-size: 16px;
+	color: var(--entity-name-color);
+}
+
+.react-flow__node-turbo .turbo-relation-subtitle {
+	font-size: 12px;
+	color: var(--entity-alias-color);
+}
+
+.react-flow__node-turbo .turbo-relation-types {
+	display: flex;
+	flex-direction: row;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.react-flow__node-turbo .turbo-relation-type + .turbo-relation-type {
+	padding-left: 4px;
+	color: var(--entity-reference-color);
+}
+
+.react-flow__node-turbo .turbo-relation.builtin {
+	color: var(--keyword-color);
+}
+
+.react-flow__node-turbo .turbo-clouds {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -119,7 +228,7 @@
 	z-index: 1;
 }
 
-.react-flow__node-turbo .cloud {
+.react-flow__node-turbo .turbo-cloud {
 	border-radius: 100%;
 	width: 30px;
 	height: 30px;
@@ -131,11 +240,11 @@
 	box-shadow: var(--node-box-shadow);
 }
 
-.react-flow__node-turbo .cloud + .cloud {
+.react-flow__node-turbo .turbo-cloud + .turbo-cloud {
 	margin-left: 2px;
 }
 
-.react-flow__node-turbo .cloud div {
+.react-flow__node-turbo .turbo-cloud div {
 	background-color: var(--bg-color);
 	flex-grow: 1;
 	border-radius: 100%;

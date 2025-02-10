@@ -1,7 +1,7 @@
 {
 	"name": "openspg-schema-highlighter",
 	"private": false,
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Front-end for OpenSPG schema mark language highlighter",
 	"author": "thundax",
 	"keywords": [

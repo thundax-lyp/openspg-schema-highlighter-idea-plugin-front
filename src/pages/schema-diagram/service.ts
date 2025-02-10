@@ -73,7 +73,13 @@ export const requestSchema = async (): Promise<Schema> => {
 		body: JSON.stringify({})
 	})
 
-	const responseBody: ResponseWrapper = await response.json()
+	const responseBody2: string = await response.text()
+	console.log(JSON.stringify(responseBody2))
+
+	// const responseBody: ResponseWrapper = await response.json()
+	const responseBody: ResponseWrapper = JSON.parse(responseBody2)
+	console.log(JSON.stringify(responseBody))
+
 	const {namespace = {}, entities = []} = responseBody.data
 	return Promise.resolve({
 		namespace: {
@@ -83,6 +89,15 @@ export const requestSchema = async (): Promise<Schema> => {
 	})
 }
 
+export const requestCss = async (): Promise<string> => {
+	const response = await fetch(`/schema-theme.css`)
+
+	const responseBody: string = await response.text()
+
+	return Promise.resolve(responseBody)
+}
+
 export default {
 	requestSchema,
+	requestCss,
 }

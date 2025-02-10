@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useDebounce } from "use-debounce";
 import Turbo from "./components/Turbo";
 import { SchemaEntity } from "./types";
 import service from "./service"
 
 import styles from "./index.module.less"
-import { useDebounce } from "use-debounce";
 
 const SchemaDiagramPage = () => {
 
@@ -14,6 +14,9 @@ const SchemaDiagramPage = () => {
 	const [schemaVersion, setSchemaVersion] = useState<number>(0);
 	const [debouncedSchemaVersion] = useDebounce(schemaVersion, 300);
 
+	const [cssVersion, setCssVersion] = useState<number>(0);
+	const [cssStyle, setCssStyle] = useState<string>("");
+
 	const requestSchema = () => {
 		service.requestSchema().then(({namespace = {}, entities = []}) => {
 			setNamespace(namespace.value || '')
@@ -21,8 +24,16 @@ const SchemaDiagramPage = () => {
 		})
 	}
 
+	const requestCss = () => {
+		service.requestCss().then((x) => {
+			setCssStyle(x)
+		})
+	}
+
 	useEffect(() => {
-		requestSchema()
+		if (debouncedSchemaVersion > 0) {
+			requestSchema()
+		}
 	}, [debouncedSchemaVersion]);
 
 	useEffect(() => {
@@ -33,10 +44,14 @@ const SchemaDiagramPage = () => {
 		<>
 			<div style={{display: "none"}} aria-label="toolbar for interactive">
 				<a id="schema-diagram-refresh-button" onClick={() => setSchemaVersion(new Date().getTime())}>refresh schema</a>
+				<a id="schema-diagram-refresh-css-button" onClick={() => requestCss()}>refresh css</a>
 			</div>
 			<div className={styles.diagramContainer}>
 				<Turbo initialEntities={entities}/>
 			</div>
+			<style>
+				{cssStyle}
+			</style>
 		</>
 	)
 }
