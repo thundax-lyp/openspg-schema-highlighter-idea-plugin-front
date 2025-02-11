@@ -9,7 +9,7 @@ import RiskMining from "./data/RiskMining.json"
 import SupplyChain from "./data/SupplyChain.json"
 import TwoWiki from "./data/TwoWiki.json"
 
-const responseBody = [
+export const responseBody = [
 	BaiKe, CsQa, DomainKG, HotpotQA, Medicine, MuSiQue, RiskMining, SupplyChain, TwoWiki
 ]
 
@@ -17,7 +17,7 @@ export default [{
 	url: '/openspg/api/schema/fetch',
 	method: 'post',
 	response: () => {
-		return responseBody[6]
+		return SupplyChain
 	}
 }]
 

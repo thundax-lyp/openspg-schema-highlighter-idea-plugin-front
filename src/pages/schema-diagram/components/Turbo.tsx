@@ -4,7 +4,6 @@ import dagre from '@dagrejs/dagre';
 
 import TurboNode, { type TurboNodeData } from './TurboNode';
 import TurboEdge, { TurboEdgeData } from './TurboEdge';
-import { DownloadIcon } from "./icons";
 import { SchemaEntity } from "@/pages/schema-diagram/types";
 
 import '@xyflow/react/dist/base.css';
@@ -61,12 +60,14 @@ const layoutElements = (
 
 	return nodes.map((node) => {
 		const nodeWithPosition = dagreGraph.node(node.id);
+		const {width = 0, height = 0} = node.data
 		return {
 			...node,
 			targetPosition: isHorizontal ? 'left' : 'top',
 			sourcePosition: isHorizontal ? 'right' : 'bottom',
 			position: {
-				x: nodeWithPosition.x, y: nodeWithPosition.y,
+				x: nodeWithPosition.x - (isHorizontal ? 0 : width / 2),
+				y: nodeWithPosition.y - (isHorizontal ? height / 2 : 0),
 			},
 		} as Node<TurboNodeData>
 	});
@@ -86,10 +87,6 @@ const TurboFlow = (props: TurboFlowProps) => {
 
 	//call fitView() after nodes have been initialized, this fitting run only once
 	const [initialized, setInitialized] = useState<boolean>(false);
-
-	const handleSave = () => {
-		console.log("onSave")
-	}
 
 	// initialize nodes and edges
 	useEffect(() => {
