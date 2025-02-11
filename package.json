@@ -1,7 +1,7 @@
 {
 	"name": "openspg-schema-highlighter",
 	"private": false,
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Front-end for OpenSPG schema mark language highlighter",
 	"author": "thundax",
 	"keywords": [
@@ -12,9 +12,9 @@
 		"tsc": "tsc -p tsconfig.node.json",
 		"dev": "vite",
 		"build": "vite build",
-		"preview": "vite preview",
 		"eslint": "eslint \"src/**/*.{ts,tsx}\" \"server/**/*.{ts,tsx}\"",
-		"eslint:fix": "eslint \"src/**/*.{ts,tsx}\" \"server/**/*.{ts,tsx}\" --fix"
+		"eslint:fix": "eslint \"src/**/*.{ts,tsx}\" \"server/**/*.{ts,tsx}\" --fix",
+		"deploy": "export TARGET=\"../openspg-schema-highlighter-idea-plugin/src/main/resources/static\" &&  rm -rf ${TARGET}/* && cp -r ./dist/* ${TARGET}/"
 	},
 	"dependencies": {
 		"@dagrejs/dagre": "^1.1.4",
