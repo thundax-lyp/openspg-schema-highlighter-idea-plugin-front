@@ -8,18 +8,17 @@ import styles from "./index.module.less"
 
 const SchemaDiagramPage = () => {
 
-	const [namespace, setNamespace] = useState<string>('')
+	// const [namespace, setNamespace] = useState<string>('')
 	const [entities, setEntities] = useState<SchemaEntity[]>([])
 
 	const [schemaVersion, setSchemaVersion] = useState<number>(0);
-	const [debouncedSchemaVersion] = useDebounce(schemaVersion, 300);
+	const [debouncedSchemaVersion] = useDebounce(schemaVersion, 500);
 
-	const [cssVersion, setCssVersion] = useState<number>(0);
 	const [cssStyle, setCssStyle] = useState<string>("");
 
 	const requestSchema = () => {
-		service.requestSchema().then(({namespace = {}, entities = []}) => {
-			setNamespace(namespace.value || '')
+		service.requestSchema().then(({entities = []}) => {
+			// setNamespace(namespace.value || '')
 			setEntities([...entities])
 		})
 	}

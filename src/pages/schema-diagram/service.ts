@@ -73,12 +73,7 @@ export const requestSchema = async (): Promise<Schema> => {
 		body: JSON.stringify({})
 	})
 
-	const responseBody2: string = await response.text()
-	console.log(JSON.stringify(responseBody2))
-
-	// const responseBody: ResponseWrapper = await response.json()
-	const responseBody: ResponseWrapper = JSON.parse(responseBody2)
-	console.log(JSON.stringify(responseBody))
+	const responseBody: ResponseWrapper = await response.json()
 
 	const {namespace = {}, entities = []} = responseBody.data
 	return Promise.resolve({

@@ -35,6 +35,14 @@ const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 		}
 	}
 
+	const properties = (entity.properties || []).filter(property => {
+		return (property.types || []).filter(x => isBuiltinType(x)).length > 0
+	})
+
+	const relations = (entity.relations || []).filter(relation => {
+		return (relation.types || []).filter(x => isBuiltinType(x)).length > 0
+	})
+
 	return (
 		<>
 			<div className="turbo-clouds">
@@ -53,8 +61,8 @@ const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 							<div className="turbo-title">{entity.name}</div>
 							<div className="turbo-subtitle">{entity.aliasName}</div>
 						</div>
-						{entity.properties && <div className="turbo-properties-container">
-							{entity.properties.map((property) => {
+						{properties.length > 0 && <div className="turbo-properties-container">
+							{properties.map((property) => {
 								const {id, name, aliasName, types} = property
 								return <div key={id} className="turbo-property">
 									<div className="turbo-property-icon"><PropertyIcon/></div>
@@ -74,8 +82,8 @@ const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 								</div>
 							})}
 						</div>}
-						{entity.relations && <div className="turbo-relations-container">
-							{entity.relations.map((relation) => {
+						{relations.length > 0 && <div className="turbo-relations-container">
+							{relations.map((relation) => {
 								const {id, name, aliasName, types} = relation
 								return <div key={id} className="turbo-property">
 									<div className="turbo-relation-icon"><RelationIcon/></div>
@@ -96,8 +104,8 @@ const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 							})}
 						</div>}
 					</div>
-					<Handle type="target" position={Position.Left}/>
 					<Handle type="source" position={Position.Right}/>
+					<Handle type="target" position={Position.Left}/>
 				</div>
 			</div>
 		</>

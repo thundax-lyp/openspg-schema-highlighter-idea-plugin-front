@@ -1,77 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ConnectionLineType, Controls, type Edge, type Node, ReactFlow, ReactFlowInstance, useEdgesState, useNodesState } from '@xyflow/react';
-import dagre from '@dagrejs/dagre';
+import { Background, ConnectionMode, Controls, type Edge, type Node, ReactFlow, ReactFlowInstance, useEdgesState, useNodesState } from '@xyflow/react';
 
 import TurboNode, { type TurboNodeData } from './TurboNode';
 import TurboEdge, { TurboEdgeData } from './TurboEdge';
-import { SchemaEntity } from "@/pages/schema-diagram/types";
+import { layoutNodes } from "./layout-nodes";
+import { SchemaEntity } from "../types";
 
 import '@xyflow/react/dist/base.css';
 import './turbo.css'
-
-export type Direction = 'TB' | 'LR' | 'RL' | 'BT';
-
-const layoutElements = (
-	{
-		nodes = [],
-		edges = [],
-		direction = 'TB',
-	}: {
-		nodes: Array<Node<TurboNodeData>>
-		edges: Array<Edge>
-		direction: Direction
-	}): Array<Node<TurboNodeData>> => {
-	const isHorizontal = direction === 'LR';
-
-	const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-	dagreGraph.setGraph({rankdir: direction});
-
-	nodes.forEach(node => {
-		dagreGraph.setNode(node.id, {
-			width: (node.data.width || 150) + 32,
-			height: (node.data.height || 20),
-		});
-	});
-
-	edges.forEach((edge) => dagreGraph.setEdge(edge.source, edge.target));
-
-	const maxFreeNodeCount = 3;
-	const freeNodes: Node<TurboNodeData>[] = []
-	const flushFreeNodes = () => {
-		for (let i = 0; i < freeNodes.length - 1; i += 1) {
-			dagreGraph.setEdge(freeNodes[i].id, freeNodes[i + 1].id)
-		}
-		freeNodes.splice(0, freeNodes.length)
-	}
-
-	nodes.forEach(node => {
-		if (!edges.find(edge => edge.source === node.id || edge.target === node.id)) {
-			freeNodes.push(node)
-			if (freeNodes.length >= maxFreeNodeCount) {
-				flushFreeNodes()
-			}
-		} else {
-			flushFreeNodes()
-		}
-	})
-	flushFreeNodes()
-
-	dagre.layout(dagreGraph);
-
-	return nodes.map((node) => {
-		const nodeWithPosition = dagreGraph.node(node.id);
-		const {width = 0, height = 0} = node.data
-		return {
-			...node,
-			targetPosition: isHorizontal ? 'left' : 'top',
-			sourcePosition: isHorizontal ? 'right' : 'bottom',
-			position: {
-				x: nodeWithPosition.x - (isHorizontal ? 0 : width / 2),
-				y: nodeWithPosition.y - (isHorizontal ? height / 2 : 0),
-			},
-		} as Node<TurboNodeData>
-	});
-};
 
 export type TurboFlowProps = {
 	initialEntities?: SchemaEntity[]
@@ -81,9 +17,9 @@ const TurboFlow = (props: TurboFlowProps) => {
 	const {initialEntities = []} = props
 
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node<TurboNodeData>>([]);
-	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge<TurboEdgeData>>([]);
 
-	const [reactFlow, setReactFlow] = useState<ReactFlowInstance>();
+	const [reactFlow, setReactFlow] = useState<ReactFlowInstance<Node<TurboNodeData>>>();
 
 	//call fitView() after nodes have been initialized, this fitting run only once
 	const [initialized, setInitialized] = useState<boolean>(false);
@@ -92,7 +28,6 @@ const TurboFlow = (props: TurboFlowProps) => {
 	useEffect(() => {
 		const normalizedNodes: Array<Node<TurboNodeData>> = []
 		const normalizedEdges: Array<Edge<TurboEdgeData>> = []
-		const additionalEdges: Array<Edge<TurboEdgeData>> = []
 
 		initialEntities.forEach(entity => {
 			const {id = ''} = entity
@@ -113,21 +48,36 @@ const TurboFlow = (props: TurboFlowProps) => {
 		})
 
 		initialEntities.forEach(entity => {
-			const {id = '', types = []} = entity
-			types.forEach(type => {
-				const parentNode = initialEntities.find(x => x.name == type)
-				if (parentNode) {
-					normalizedEdges.push({
-						id: `edge__${parentNode.id}__${id}`,
-						source: `${parentNode.id}`,
-						target: id,
-					})
-				}
+			const {id = '', properties = [], relations = []} = entity
+
+			const schemas = [...properties, ...relations]
+			schemas.forEach(({aliasName, types}) => {
+				types?.forEach(type => {
+					const target = initialEntities.find(x => x.name == type)
+					if (target?.id) {
+						if (id === target.id) {
+							console.log(`find self-connect node, id: ${id}`)
+						} else {
+							const edgeId = `edge__${id}__${target.id}`
+							const targetEdge = normalizedEdges.find(x => x.id == edgeId);
+							if (targetEdge) {
+								targetEdge.label = `${targetEdge.label}、${aliasName}`
+							} else {
+								normalizedEdges.push({
+									id: `edge__${id}__${target.id}`,
+									source: `${id}`,
+									target: target.id,
+									label: `${aliasName}`,
+								})
+							}
+						}
+					}
+				})
 			})
 		})
 
-		setNodes(layoutElements({nodes: normalizedNodes, edges: normalizedEdges, direction: 'LR'}));
-		setEdges([...normalizedEdges, ...additionalEdges])
+		setNodes(layoutNodes({nodes: normalizedNodes, edges: normalizedEdges}));
+		setEdges([...normalizedEdges])
 	}, [initialEntities]);
 
 	// recalculate node position after HTML elements rendered
@@ -148,7 +98,7 @@ const TurboFlow = (props: TurboFlowProps) => {
 		})
 
 		if (dirty) {
-			setNodes(layoutElements({nodes: newNodes, edges, direction: 'LR'}));
+			setNodes(layoutNodes({nodes: newNodes, edges}));
 			setInitialized(true)
 		}
 	}, [nodes])
@@ -171,8 +121,8 @@ const TurboFlow = (props: TurboFlowProps) => {
 					edges={edges}
 					onNodesChange={onNodesChange}
 					onEdgesChange={onEdgesChange}
-					connectionLineType={ConnectionLineType.SmoothStep}
-					onInit={(x) => setReactFlow(x)}
+					connectionMode={ConnectionMode.Loose}
+					onInit={setReactFlow}
 					fitView={false}
 					nodeTypes={{
 						turbo: TurboNode,
@@ -182,10 +132,12 @@ const TurboFlow = (props: TurboFlowProps) => {
 					}}
 					defaultEdgeOptions={{
 						type: 'turbo',
-						markerEnd: 'edge-circle',
+						markerStart: 'edge-circle',
+						markerEnd: 'edge-arrowhead',
 					}}
 				>
-					<Controls showInteractive={true} position="bottom-right">
+					<Background/>
+					<Controls showInteractive={true} position="top-left">
 						{/*<button type="button" className="react-flow__controls-button" title="save as image" aria-label="save as image" onClick={() => handleSave()}>*/}
 						{/*	<DownloadIcon/>*/}
 						{/*</button>*/}
@@ -208,6 +160,28 @@ const TurboFlow = (props: TurboFlowProps) => {
 								orient="auto"
 							>
 								<circle stroke="#2a8af6" strokeOpacity="0.75" r="2" cx="0" cy="0"/>
+							</marker>
+							<marker
+								id="edge-arrowhead"
+								className="react-flow__arrowhead"
+								markerWidth="16"
+								markerHeight="16"
+								viewBox="-10 -10 20 20"
+								markerUnits="strokeWidth"
+								orient="auto-start-reverse"
+								refX="0"
+								refY="0"
+							>
+								<polyline
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									fill="none"
+									points="-5,-4 0,0 -5,4"
+									style={{
+										stroke: "#a853ba",
+										strokeWidth: 1,
+									}}
+								/>
 							</marker>
 						</defs>
 					</svg>
