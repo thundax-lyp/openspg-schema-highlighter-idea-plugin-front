@@ -12,12 +12,12 @@ export interface LayoutEdge {
 	weight?: number
 }
 
-export interface LayoutParam {
+export interface LayoutGroup {
 	nodes: Array<LayoutNode>
 	edges: Array<LayoutEdge>
 }
 
 export interface Layout {
 	name: string
-	layout: (param: LayoutParam) => Array<LayoutNode>
+	layout: (props: LayoutGroup) => Array<LayoutNode>
 }

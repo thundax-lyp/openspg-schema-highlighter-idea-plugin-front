@@ -1,6 +1,6 @@
 import dagre from "@dagrejs/dagre";
 
-import { Layout, LayoutNode, LayoutParam } from "./types";
+import { Layout, LayoutGroup, LayoutNode } from "./types";
 
 export type Direction = 'TB' | 'LR' | 'RL' | 'BT';
 
@@ -19,7 +19,7 @@ export const DagreLayout = (props?: DagreLayoutProps): Layout => {
 		maxFreeNodeCount = 3,
 	} = props || {}
 
-	const layout = (param: LayoutParam): Array<LayoutNode> => {
+	const layout = (param: LayoutGroup): Array<LayoutNode> => {
 		const {nodes, edges} = param
 		if (nodes.length == 0) {
 			return []

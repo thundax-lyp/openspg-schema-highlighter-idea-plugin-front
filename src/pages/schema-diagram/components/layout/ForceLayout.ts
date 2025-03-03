@@ -1,4 +1,4 @@
-import { Layout, LayoutNode, LayoutParam } from "./types";
+import { Layout, LayoutGroup, LayoutNode } from "./types";
 import * as d3 from "d3";
 
 const MANY_BODY_STRENGTH = -80
@@ -19,7 +19,7 @@ export const ForceLayout = (props?: ForceLayoutProps): Layout => {
 		collisionOffset = COLLISION_OFFSET,
 	} = props || {}
 
-	const layout = (param: LayoutParam): Array<LayoutNode> => {
+	const layout = (param: LayoutGroup): Array<LayoutNode> => {
 		const {nodes, edges} = param
 		if (nodes.length == 0) {
 			return []
@@ -41,7 +41,7 @@ export const ForceLayout = (props?: ForceLayoutProps): Layout => {
 				return Math.sqrt(width * width + height * height) / 2 + collisionOffset
 			}))
 			.force("link", d3.forceLink(layoutEdges).distance(linkDistance))
-			.force("x", d3.forceX(60))
+			.force("x", d3.forceY(60))
 
 		simulation.tick(100)
 

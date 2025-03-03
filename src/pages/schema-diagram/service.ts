@@ -5,32 +5,32 @@ const API_PREFIX = `/openspg/api`
 interface ResponseWrapper {
 	code: number
 	message: string
-	data: SchemaResponse
+	data: SchemaVO
 }
 
-interface SchemaResponse {
-	namespace?: NamespaceResponse
-	entities?: EntityResponse[]
+interface SchemaVO {
+	namespace?: NamespaceVO
+	entities?: EntityVO[]
 }
 
-interface NamespaceResponse {
+interface NamespaceVO {
 	value?: string
 }
 
-interface EntityResponse {
+interface EntityVO {
 	name?: string
 	aliasName?: string
 	types?: string[]
-	properties?: PropertyResponse[]
+	properties?: PropertyVO[]
 }
 
-interface PropertyResponse {
+interface PropertyVO {
 	name?: string
 	value?: string
-	children?: EntityResponse[]
+	children?: EntityVO[]
 }
 
-const normalizeEntityResponse = ({name, aliasName, types, properties}: EntityResponse, index: number, prefix = ''): SchemaEntity => {
+const normalizeEntity = ({name, aliasName, types, properties}: EntityVO, index: number, prefix = ''): SchemaEntity => {
 	const entity: SchemaEntity = {
 		id: `${prefix}${index}`, name, aliasName, types
 	}
@@ -54,10 +54,10 @@ const normalizeEntityResponse = ({name, aliasName, types, properties}: EntityRes
 			entity.autoRelate = value.trim()
 
 		} else if (name === 'properties' && children?.length > 0) {
-			entity.properties = children.map((x, index) => normalizeEntityResponse(x, index, `${entity.id}_`))
+			entity.properties = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_`))
 
 		} else if (name === 'relations' && children?.length > 0) {
-			entity.relations = children.map((x, index) => normalizeEntityResponse(x, index, `${entity.id}_`))
+			entity.relations = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_`))
 		}
 	})
 	return entity;
@@ -75,12 +75,12 @@ export const requestSchema = async (): Promise<Schema> => {
 
 	const responseBody: ResponseWrapper = await response.json()
 
-	const {namespace = {}, entities = []} = responseBody.data
+	const {namespace = {}, entities = []} = responseBody?.data || {}
 	return Promise.resolve({
 		namespace: {
 			value: namespace.value
 		},
-		entities: entities.map((x, index) => normalizeEntityResponse(x, index)).filter(x => x)
+		entities: entities.map((x, index) => normalizeEntity(x, index)).filter(x => x)
 	})
 }
 

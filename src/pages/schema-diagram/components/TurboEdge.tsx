@@ -49,16 +49,16 @@ const TurboEdge = (props: EdgeProps<Edge<TurboEdgeData>>) => {
 				markerEnd={markerEnd}
 			>
 			</path>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart - 1}, ${labelTop - 1})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart}, ${labelTop - 1})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart + 1}, ${labelTop - 1})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart - 1}, ${labelTop})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart + 1}, ${labelTop})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart - 1}, ${labelTop + 1})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart}, ${labelTop + 1})`}>{label}</text>
-			<text fontSize="12px" fill="#fffc" transform={`translate(${labelStart + 1}, ${labelTop + 1})`}>{label}</text>
-
-			<text fontSize="12px" fill="var(--entity-alias-color)" enableBackground="#fff" transform={`translate(${labelStart}, ${labelTop})`}>{label}</text>
+			<text
+				fontSize="12px"
+				fill="var(--entity-name-color)"
+				transform={`translate(${labelStart}, ${labelTop})`}
+				style={{
+					textShadow: '0 0 20px var(--keyword-color)',
+				}}
+			>
+				{label}
+			</text>
 		</>
 	);
 }
