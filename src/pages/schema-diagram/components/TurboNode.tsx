@@ -26,7 +26,9 @@ const isBuiltinType = (type: string) => {
 }
 
 const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
-	const {entity = {}} = props.data;
+	const {data = {}} = props
+
+	const {entity = {}} = data;
 	const builtinTypes = (entity.types || []).filter(x => isBuiltinType(x))
 
 	const handleTypeClick = (type: string) => {

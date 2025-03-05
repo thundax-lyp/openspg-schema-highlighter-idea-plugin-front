@@ -80,7 +80,7 @@ export const requestSchema = async (): Promise<Schema> => {
 		namespace: {
 			value: namespace.value
 		},
-		entities: entities.map((x, index) => normalizeEntity(x, index)).filter(x => x)
+		entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
 	})
 }
 

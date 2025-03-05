@@ -41,18 +41,16 @@ export interface LayoutNodesParam {
 export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>> => {
 	const {nodes, edges} = params
 
-	const layoutEdges: Array<LayoutEdge> = edges
-		.filter(x => x.source != x.target)
-		.map(edge => {
-			return {
-				source: {id: edge.source}, target: {id: edge.target}
-			}
-		})
-
 	const layoutNodes: Array<LayoutNode> = nodes.map(node => {
 		const {id, position, data} = node
 		return {
 			id, x: position.x, y: position.y, width: data.width, height: data.height
+		}
+	})
+
+	const layoutEdges: Array<LayoutEdge> = edges.map(edge => {
+		return {
+			source: {id: edge.source}, target: {id: edge.target}
 		}
 	})
 
@@ -87,17 +85,19 @@ export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>
 			layoutNode.x = (layoutNode.x || 0) - left
 			layoutNode.y = (layoutNode.y || 0) - top + lastGroupBottom
 		})
-		lastGroupBottom = lastGroupBottom + (bottom - top) + 30
+		lastGroupBottom = lastGroupBottom + (bottom - top) + 80
 	})
 
 	return layoutGroups.flatMap(layoutGroup => {
 		return layoutGroup.nodes.map(layoutNode => {
 			const node = nodes.find(x => x.id == layoutNode.id)
-			return {
-				...node, position: {
-					x: layoutNode.x, y: layoutNode.y
+			if (node) {
+				node.position = {
+					x: layoutNode.x || 0,
+					y: layoutNode.y || 0
 				}
-			} as Node<TurboNodeData>
-		})
+			}
+			return node
+		}).filter(x => !!x)
 	})
 }

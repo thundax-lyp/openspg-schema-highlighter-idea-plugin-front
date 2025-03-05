@@ -17,6 +17,6 @@ export default [{
 	url: '/openspg/api/schema/fetch',
 	method: 'post',
 	response: () => {
-		return RiskMining
+		return BaiKe
 	}
 }]

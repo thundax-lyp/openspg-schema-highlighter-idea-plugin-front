@@ -49,27 +49,22 @@ const TurboFlow = (props: TurboFlowProps) => {
 
 		initialEntities.forEach(entity => {
 			const {id = '', properties = [], relations = []} = entity
-
 			const schemas = [...properties, ...relations]
 			schemas.forEach(({aliasName, types}) => {
 				types?.forEach(type => {
 					const target = initialEntities.find(x => x.name == type)
 					if (target?.id) {
-						if (id === target.id) {
-							console.log(`find self-connect node, id: ${id}`)
+						const edgeId = `edge__${id}__${target.id}`
+						const targetEdge = normalizedEdges.find(x => x.id == edgeId);
+						if (targetEdge) {
+							targetEdge.label = `${targetEdge.label}、${aliasName}`
 						} else {
-							const edgeId = `edge__${id}__${target.id}`
-							const targetEdge = normalizedEdges.find(x => x.id == edgeId);
-							if (targetEdge) {
-								targetEdge.label = `${targetEdge.label}、${aliasName}`
-							} else {
-								normalizedEdges.push({
-									id: `edge__${id}__${target.id}`,
-									source: `${id}`,
-									target: target.id,
-									label: `${aliasName}`,
-								})
-							}
+							normalizedEdges.push({
+								id: `edge__${id}__${target.id}`,
+								source: `${id}`,
+								target: target.id,
+								label: `${aliasName}`,
+							})
 						}
 					}
 				})

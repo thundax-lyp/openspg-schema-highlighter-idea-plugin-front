@@ -92,3 +92,24 @@ export const getEdgeParams = (source: InternalNode, target: InternalNode, paddin
 		targetPos,
 	};
 }
+
+export const fissionAnchor = (anchor: XYPosition, arc = 40.0): [XYPosition, XYPosition] | undefined => {
+	const radius = Math.sqrt(anchor.x ** 2 + anchor.y ** 2)
+	if (radius <= 20) {
+		return undefined
+	}
+	const delta = Math.PI * arc / radius
+
+	let alpha = Math.asin(Math.abs(anchor.y) / radius)
+	alpha = anchor.x < 0 ? Math.PI - alpha : alpha
+	alpha = anchor.y < 0 ? -alpha : alpha
+
+	const scale = 1.6
+	return [{
+		x: radius * Math.cos(alpha + delta) * scale,
+		y: radius * Math.sin(alpha + delta) * scale,
+	}, {
+		x: radius * Math.cos(alpha - delta) * scale,
+		y: radius * Math.sin(alpha - delta) * scale,
+	}]
+}
