@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import { useRoutes } from 'react-router-dom'
-import { webRouter } from '@/routers'
+import {useMemo} from 'react'
+import {useRoutes} from 'react-router-dom'
+import {webRouter} from '@/routers'
 
 function App() {
 

@@ -19,4 +19,10 @@ export default [{
 	response: () => {
 		return BaiKe
 	}
+}, {
+	url: '/openspg/api/schema/focus',
+	method: 'post',
+	response: () => {
+		return true
+	}
 }]

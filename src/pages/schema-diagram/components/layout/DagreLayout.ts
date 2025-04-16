@@ -1,6 +1,6 @@
 import dagre from "@dagrejs/dagre";
 
-import { Layout, LayoutGroup, LayoutNode } from "./types";
+import {Layout, LayoutGroup, LayoutNode} from "./types";
 
 export type Direction = 'TB' | 'LR' | 'RL' | 'BT';
 

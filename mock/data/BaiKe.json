@@ -27,6 +27,11 @@
 										"value": "TextAndVector"
 									}
 								]
+							},
+							{
+								"name": "subChunks",
+								"aliasName": "子内容",
+								"types": ["Chunk"]
 							}
 						]
 					}
@@ -126,6 +131,10 @@
 										"value": "Text"
 									}
 								]
+							}, {
+								"name": "belongTo",
+								"aliasName": "所属",
+								"types": ["Chunk"]
 							}
 						]
 					}
@@ -427,6 +436,10 @@
 										"value": "MultiValue"
 									}
 								]
+							}, {
+								"name": "parent",
+								"aliasName": "家长",
+								"types": ["Person"]
 							}
 						]
 					}

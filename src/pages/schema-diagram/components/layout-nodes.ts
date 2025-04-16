@@ -1,7 +1,7 @@
-import type { Edge, Node } from "@xyflow/react";
-import { DagreLayout, ForceLayout, LayoutEdge, LayoutGroup, LayoutNode } from "./layout";
-import type { TurboNodeData } from "./TurboNode";
-import { TurboEdgeData } from "./TurboEdge";
+import type {Edge, Node} from "@xyflow/react";
+import {DagreLayout, ForceLayout, LayoutEdge, LayoutGroup, LayoutNode} from "./layout";
+import type {TurboNodeData} from "./TurboNode";
+import {TurboEdgeData} from "./TurboEdge";
 
 const groupEdges = (edges: LayoutEdge[]): Array<LayoutEdge[]> => {
 	const groups: Array<Set<string>> = []

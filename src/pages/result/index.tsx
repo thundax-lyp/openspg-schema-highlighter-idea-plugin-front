@@ -1,5 +1,5 @@
-import { Button, Result } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import {Button, Result} from 'antd'
+import {useNavigate} from 'react-router-dom'
 
 function ResultPage() {
   const navigate = useNavigate()

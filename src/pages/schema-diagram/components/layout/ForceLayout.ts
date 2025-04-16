@@ -1,6 +1,6 @@
-import { Layout, LayoutEdge, LayoutGroup, LayoutNode } from "./types";
+import {Layout, LayoutEdge, LayoutGroup, LayoutNode} from "./types";
 import * as d3 from "d3";
-import { SimulationLinkDatum, SimulationNodeDatum } from "d3-force";
+import {SimulationLinkDatum, SimulationNodeDatum} from "d3-force";
 
 const MANY_BODY_STRENGTH = -80
 const LINK_DISTANCE = 80

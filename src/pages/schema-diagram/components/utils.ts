@@ -1,6 +1,6 @@
-import { Rect } from "@xyflow/system/dist/esm/types/utils";
-import type { InternalNode } from "@xyflow/react/dist/esm/types";
-import { Position, XYPosition } from "@xyflow/react";
+import {Rect} from "@xyflow/system/dist/esm/types/utils";
+import type {InternalNode} from "@xyflow/react/dist/esm/types";
+import {Position, XYPosition} from "@xyflow/react";
 
 const inflateRect = (rect: Rect, padding: number): Rect => {
 	const {x, y, width, height} = rect
