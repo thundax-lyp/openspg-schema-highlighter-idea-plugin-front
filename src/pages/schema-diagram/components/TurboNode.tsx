@@ -1,8 +1,8 @@
-import React, { memo, ReactNode } from 'react';
+import React, {memo, ReactNode} from 'react';
 
-import { Handle, type Node, type NodeProps, Position } from '@xyflow/react';
-import { SchemaEntity } from "../types";
-import { ConceptIcon, EntityIcon, EventIcon, FloatIcon, IntegerIcon, PropertyIcon, RelationIcon, TextIcon } from "./icons";
+import {Handle, type Node, type NodeProps, Position} from '@xyflow/react';
+import {SchemaEntity} from "../types";
+import {ConceptIcon, EntityIcon, EventIcon, FloatIcon, IntegerIcon, PropertyIcon, RelationIcon, TextIcon} from "./icons";
 
 export type TurboNodeData = {
 	entity?: SchemaEntity

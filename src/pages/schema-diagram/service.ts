@@ -1,4 +1,4 @@
-import { Schema, SchemaEntity } from "./types"
+import {Schema, SchemaEntity} from "./types"
 
 const API_PREFIX = `/openspg/api`
 
@@ -84,6 +84,20 @@ export const requestSchema = async (): Promise<Schema> => {
 	})
 }
 
+export const activateEntities = async (entities: SchemaEntity[]): Promise<boolean> => {
+	const response = await fetch(`${API_PREFIX}/schema/focus`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(entities.map(({id}) => ({id})))
+	})
+
+	const responseBody: ResponseWrapper = await response.json()
+
+	return Promise.resolve(responseBody.code === 0)
+}
+
 export const requestCss = async (): Promise<string> => {
 	const response = await fetch(`/schema-theme.css`)
 
@@ -94,5 +108,6 @@ export const requestCss = async (): Promise<string> => {
 
 export default {
 	requestSchema,
+	activateEntities,
 	requestCss,
 }

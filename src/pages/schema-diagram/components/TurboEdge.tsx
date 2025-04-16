@@ -1,8 +1,8 @@
 import React from 'react';
-import { type Edge, type EdgeProps, getBezierPath, type Node, useEdges, useInternalNode, useNodes, XYPosition } from '@xyflow/react';
-import { getEdgeParams } from "./utils";
-import { TurboNodeData } from "@/pages/schema-diagram/components/TurboNode";
-import { InternalNode } from "@xyflow/react/dist/esm/types";
+import {type Edge, type EdgeProps, getBezierPath, type Node, useEdges, useInternalNode, useNodes, XYPosition} from '@xyflow/react';
+import {getEdgeParams} from "./utils";
+import {TurboNodeData} from "@/pages/schema-diagram/components/TurboNode";
+import {InternalNode} from "@xyflow/react/dist/esm/types";
 
 export type TurboEdgeData = {
 	unused?: any
