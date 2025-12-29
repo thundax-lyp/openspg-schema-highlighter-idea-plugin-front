@@ -22,5 +22,6 @@
 			"@haydn-editor/*": ["src/pages/write/editor/*"]
 		}
 	},
-	"include": ["src", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts"]
+	"include": [
+      "src", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts"]
 }

@@ -24,14 +24,8 @@ export default defineConfig(({mode}) => {
 			},
 		},
 		css: {
-			modules: {
-				localsConvention: (x) => x
-			},
 			preprocessorOptions: {
 				less: {
-					modifyVars: {
-						// hack: `true; @import (reference) "${resolve('src/styles/index.less')}";`,
-					},
 					javascriptEnabled: true
 				}
 			}
