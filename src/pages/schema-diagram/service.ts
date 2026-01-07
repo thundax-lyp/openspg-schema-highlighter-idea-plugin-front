@@ -55,10 +55,10 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
             entity.autoRelate = value.trim()
 
         } else if (name === 'properties' && children?.length > 0) {
-            entity.properties = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_`))
+            entity.properties = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_property_`))
 
         } else if (name === 'relations' && children?.length > 0) {
-            entity.relations = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_`))
+            entity.relations = children.map((x, index) => normalizeEntity(x, index, `${entity.id}__relation_`))
         }
     })
     return entity;

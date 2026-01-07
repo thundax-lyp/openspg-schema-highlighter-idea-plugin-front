@@ -26,6 +26,39 @@
                                 "types": [
                                     "Node2"
                                 ]
+                            },
+                            {
+                                "name": "desc",
+                                "aliasName": "描述",
+                                "types": [
+                                    "Text"
+                                ]
+                            },
+                            {
+                                "name": "semanticType",
+                                "aliasName": "语义类型",
+                                "types": [
+                                    "Text"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "relations",
+                        "children": [
+                            {
+                                "name": "synonyms",
+                                "aliasName": "同义词",
+                                "types": [
+                                    "Text"
+                                ]
+                            },
+                            {
+                                "name": "officialName",
+                                "aliasName": "标准名",
+                                "types": [
+                                    "Text"
+                                ]
                             }
                         ]
                     }
