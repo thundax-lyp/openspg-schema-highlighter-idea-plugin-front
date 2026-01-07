@@ -13,13 +13,13 @@ import {
     useReactFlow
 } from '@xyflow/react';
 
-import TurboNode, {type TurboNodeData} from './TurboNode';
-import TurboEdge, {TurboEdgeData} from './TurboEdge';
+import {type TurboNodeData, TurboNode} from './turbo-node';
+import {type TurboEdgeData, TurboEdge} from './turbo-edge';
 import {layoutNodes} from "./layout-nodes";
 import {SchemaEntity} from "../types";
 
 import '@xyflow/react/dist/base.css';
-import './turbo.css'
+import './turbo.css';
 
 export type TurboFlowProps = {
     initialEntities?: SchemaEntity[]
@@ -139,9 +139,9 @@ const TurboFlow = (props: TurboFlowProps) => {
     // auto-fitting layout
     useEffect(() => {
         if (initialized && reactFlow) {
-            // reactFlow.fitView({
-            //     nodes: nodes.map(({id}) => ({id}))
-            // }).then(x => x)
+            reactFlow.fitView({
+                nodes: nodes.map(({id}) => ({id}))
+            }).then(x => x)
         }
     }, [initialized, reactFlow]);
 
@@ -222,12 +222,10 @@ const TurboFlow = (props: TurboFlowProps) => {
     );
 };
 
-const TurboFlowWithProvider = (props: TurboFlowProps) => {
+export const TurboFlowWithProvider = (props: TurboFlowProps) => {
     return (
         <ReactFlowProvider>
             <TurboFlow {...props} />
         </ReactFlowProvider>
     );
 }
-
-export default TurboFlowWithProvider

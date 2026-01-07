@@ -31,7 +31,7 @@ const isBuiltinType = (type: string) => {
 	return Object.keys(BUILTIN_TYPE_ICONS).includes(type)
 }
 
-const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
+export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode => {
 	const {data = {}} = props
 
 	const {entity = {}} = data;
@@ -119,5 +119,3 @@ const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>) => {
 		</>
 	);
 });
-
-export default TurboNode

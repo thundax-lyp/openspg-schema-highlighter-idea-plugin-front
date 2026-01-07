@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react'
 import useDebounce from '@/hooks/use-debounce';
-import Turbo from "./components/Turbo";
+import {TurboFlowWithProvider} from "./components";
 import {SchemaEntity, SchemaNamespace} from "./types";
 import service from "./service"
 
@@ -64,7 +64,7 @@ const SchemaDiagramPage = () => {
                 <a style={toolbarItemStyle}>Name: {namespace?.value}</a>
             </div>
             <div className={styles.diagramContainer}>
-                <Turbo
+                <TurboFlowWithProvider
                     initialEntities={entities}
                     selection={selectedEntities}
                     onSelectionChange={(entities) => {
