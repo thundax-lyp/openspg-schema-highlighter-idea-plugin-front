@@ -4,10 +4,16 @@ import {Handle, type Node, type NodeProps, Position} from '@xyflow/react';
 import {SchemaEntity} from "../types";
 import {ConceptIcon, EntityIcon, EventIcon, FloatIcon, IntegerIcon, PropertyIcon, RelationIcon, TextIcon} from "./icons";
 
-export type TurboNodeData = {
-	entity?: SchemaEntity
+export type TurboNodeRect = {
+	x?: number
+	y?: number
 	width?: number
 	height?: number
+}
+
+export type TurboNodeData = {
+	entity?: SchemaEntity
+	layout?: TurboNodeRect
 };
 
 const BUILTIN_TYPE_ICONS: {

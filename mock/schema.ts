@@ -13,13 +13,16 @@ import SampleStep1 from "./data/SampleStep1.json"
 import SampleStep2 from "./data/SampleStep2.json"
 import SampleStep3 from "./data/SampleStep3.json"
 import SampleStep4 from "./data/SampleStep4.json"
+import SampleStep5 from "./data/SampleStep5.json"
+import SampleStep6 from "./data/SampleStep6.json"
 
 export const responseBody = [
     BaiKe, CsQa, DomainKG, HotpotQA, Medicine, MuSiQue, RiskMining, SupplyChain, TwoWiki
 ]
 
 export const responseBodyStep = [
-    SampleStep1, SampleStep2, SampleStep3, SampleStep4
+    SampleStep1, SampleStep2, SampleStep3, SampleStep4, SampleStep5, SampleStep6
+    // SampleStep1, SampleStep2, SampleStep3, SampleStep4
     // SampleStep1
 ]
 

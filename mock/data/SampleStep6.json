@@ -1,0 +1,125 @@
+{
+    "code": 0,
+    "message": "success step6",
+    "data": {
+        "namespace": {
+            "value": "Sample"
+        },
+        "entities": [
+            {
+                "name": "Node1",
+                "aliasName": "节点1",
+                "types": [
+                    "EntityType"
+                ],
+                "properties": [
+                    {
+                        "name": "desc",
+                        "value": "node is node1"
+                    },
+                    {
+                        "name": "properties",
+                        "children": [
+                            {
+                                "name": "belongTo",
+                                "aliasName": "属于",
+                                "types": [
+                                    "Node2"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "id": "45ac7dd0-c38d-4324-b5e2-629715892891"
+            },
+            {
+                "name": "Node2",
+                "aliasName": "节点2",
+                "types": [
+                    "EntityType"
+                ],
+                "properties": [
+                    {
+                        "name": "properties",
+                        "children": [
+                            {
+                                "name": "belongTo",
+                                "aliasName": "属于",
+                                "types": [
+                                    "Node3"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "id": "fe96c75a-968b-4ff9-b85d-0dbd04453615"
+            },
+            {
+                "name": "Node3",
+                "aliasName": "节点3",
+                "types": [
+                    "EntityType"
+                ],
+                "properties": [
+                    {
+                        "name": "properties",
+                        "children": [
+                            {
+                                "name": "belongTo",
+                                "aliasName": "属于",
+                                "types": [
+                                    "Node4"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "id": "d8009544-c917-45b1-a114-6beaa76c4145"
+            },
+            {
+                "name": "Node4",
+                "aliasName": "节点4",
+                "types": [
+                    "EntityType"
+                ],
+                "properties": [
+                    {
+                        "name": "properties",
+                        "children": [
+                            {
+                                "name": "belongTo",
+                                "aliasName": "属于",
+                                "types": [
+                                    "Node5"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "id": "24f1acb8-818d-470e-b076-864024db751c"
+            },
+            {
+                "name": "Node5",
+                "aliasName": "节点5",
+                "types": [
+                    "EntityType"
+                ],
+                "properties": [
+                    {
+                        "name": "properties",
+                        "children": [
+                            {
+                                "name": "belongTo",
+                                "aliasName": "属于",
+                                "types": [
+                                    "Node1"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "id": "7d04af3d-4bfd-43a6-a850-fd40abec9ef4"
+            }
+        ]
+    }
+}

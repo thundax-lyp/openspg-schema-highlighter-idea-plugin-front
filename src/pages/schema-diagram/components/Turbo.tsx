@@ -51,23 +51,22 @@ const TurboFlow = (props: TurboFlowProps) => {
         initialEntities.forEach((entity, index) => {
             const {id = ''} = entity
             if (!normalizedNodes.find(x => x.id === id)) {
-                const normalizedNode: Node<TurboNodeData> = {
-                    id, position: {x: 0.01 * index, y: 0.01 * index}, type: 'turbo', data: {
-                        entity,
-                    },
+                const targetNode = nodes.find(x => x.id === id);
+                if (targetNode) {
+                    normalizedNodes.push({
+                        ...targetNode, data: {
+                            ...targetNode.data, entity
+                        }
+                    })
+                } else {
+                    normalizedNodes.push({
+                        id, position: {x: 0, y: 0}, type: 'turbo', data: {
+                            entity, layout: {
+                                x: 0.01 * (index % 3), y: 0.01 * (index / 3), width: 0, height: 0
+                            }
+                        }
+                    })
                 }
-                // NOTICE:
-                // all position of nodes will be changed after fitView()
-                // so cached data will be wrong for layout engine.
-                // we need a virtual position system between layout engine and zoom in/out screen
-                //
-                // const cachedNode = nodes.find(x => x.id === id)
-                // if (cachedNode) {
-                //     normalizedNode.position = cachedNode.position
-                //     normalizedNode.data.width = cachedNode.data.width
-                //     normalizedNode.data.height = cachedNode.data.height
-                // }
-                normalizedNodes.push(normalizedNode)
             }
         })
 
@@ -84,7 +83,7 @@ const TurboFlow = (props: TurboFlowProps) => {
                             targetEdge.label = `${targetEdge.label}、${aliasName}`
                         } else {
                             normalizedEdges.push({
-                                id: `edge__${id}__${target.id}`,
+                                id: edgeId,
                                 source: `${id}`,
                                 target: target.id,
                                 label: `${aliasName}`,
@@ -94,7 +93,6 @@ const TurboFlow = (props: TurboFlowProps) => {
                 })
             })
         })
-
         setNodes(layoutNodes({nodes: normalizedNodes, edges: normalizedEdges}));
         setEdges([...normalizedEdges])
     }, [initialEntities]);
@@ -103,13 +101,16 @@ const TurboFlow = (props: TurboFlowProps) => {
     useEffect(() => {
         let dirty = false
         const newNodes = nodes.map(node => {
-            if (node.measured && (node.measured.width != node.data.width || node.measured.height != node.data.height)) {
+            if (node.measured && (node.measured.width != node.data.layout?.width || node.measured.height != node.data.layout?.height)) {
                 dirty = true
                 return {
                     ...node, data: {
                         ...node.data,
-                        width: node.measured.width,
-                        height: node.measured.height
+                        layout: {
+                            ...node.data.layout,
+                            width: node.measured.width,
+                            height: node.measured.height
+                        }
                     }
                 }
             }
@@ -138,9 +139,9 @@ const TurboFlow = (props: TurboFlowProps) => {
     // auto-fitting layout
     useEffect(() => {
         if (initialized && reactFlow) {
-            reactFlow.fitView({
-                nodes: nodes.map(({id}) => ({id}))
-            }).then(x => x)
+            // reactFlow.fitView({
+            //     nodes: nodes.map(({id}) => ({id}))
+            // }).then(x => x)
         }
     }, [initialized, reactFlow]);
 
