@@ -57,7 +57,7 @@ const SchemaDiagramPage = () => {
 
     return (
         <>
-            <div style={{display: "none-"}}>
+            <div style={{display: "none"}}>
                 <a id="schema-diagram-refresh-css-button" onClick={() => onRefreshCssClick()} style={toolbarItemStyle}>refresh css</a>
                 <a id="schema-diagram-refresh-button" onClick={() => onRefreshSchemaClick()} style={toolbarItemStyle}>refresh schema</a>
                 <a id="schema-diagram-active-entity-button" onClick={() => onActivateEntityClick()} style={toolbarItemStyle}>activate entity</a>
