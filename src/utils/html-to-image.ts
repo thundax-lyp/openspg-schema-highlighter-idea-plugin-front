@@ -17,9 +17,9 @@ export async function htmlToImage(html: string | HTMLElement, title?: string) {
         tempLink.click()
         document.body.removeChild(tempLink)
         window.URL.revokeObjectURL(imgUrl)
-        Promise.resolve()
+        await Promise.resolve()
     } catch (error: any) {
-        Promise.reject()
+        await Promise.reject()
     }
 }
 
