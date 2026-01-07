@@ -10,7 +10,7 @@
                 "name": "Node1",
                 "aliasName": "节点1",
                 "types": [
-                    "EntityType"
+                    "EntityType", "ConceptType"
                 ],
                 "properties": [
                     {
