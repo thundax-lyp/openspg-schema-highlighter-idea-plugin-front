@@ -18,10 +18,13 @@
 		"incremental": true,
 		"baseUrl": "./",
 		"paths": {
-			"@/*": ["src/*"],
-			"@haydn-editor/*": ["src/pages/write/editor/*"]
+			"@/*": ["src/*"]
 		}
 	},
 	"include": [
-      "src", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts", "node_modules/@types/node/buffer.d.ts"]
+      "src"
+	],
+	"exclude": [
+		"node_modules"
+	]
 }
