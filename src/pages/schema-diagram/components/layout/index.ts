@@ -1,3 +1,3 @@
 export * from "./types"
-export * from "./DagreLayout"
-export * from "./ForceLayout"
+export * from "./dagre-layout"
+export * from "./force-layout"
