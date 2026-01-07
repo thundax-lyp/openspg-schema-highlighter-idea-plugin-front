@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './pages/App'
 import {BrowserRouter} from 'react-router-dom'
 import Global from './components/global'
+import App from './pages/app'
 
 import '@/styles/global.less'
 import Loading from "@/components/loading";
