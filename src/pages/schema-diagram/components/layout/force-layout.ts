@@ -56,7 +56,6 @@ export const ForceLayout = (): Layout => {
             .alphaDecay(0)
             .force("charge", d3.forceManyBody()
                 .strength(-30)
-                .distanceMax(400)
                 .theta(0.9)
             )
             .force("link", d3.forceLink(layoutEdges)
