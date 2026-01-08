@@ -5,7 +5,7 @@ export const copyToClipboard = (text: string) => {
             try {
                 await navigator.clipboard.writeText(text)
                 resolve(text)
-            } catch (err) {
+            } catch {
                 // 无操作
             }
         }
