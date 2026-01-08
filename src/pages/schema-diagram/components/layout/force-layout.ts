@@ -70,7 +70,7 @@ export const ForceLayout = (): Layout => {
                     }
                     const node = nodes[index]
                     const {width = 0, height = 0} = node || {}
-                    return Math.sqrt(width ** 2 + height ** 2) / 2 + 60;
+                    return Math.sqrt(width ** 2 + height ** 2);
                 })
                 .strength(0.7)
             )
