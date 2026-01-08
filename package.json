@@ -1,62 +1,57 @@
 {
-  "name": "openspg-schema-highlighter",
-  "private": false,
-  "version": "0.0.17",
-  "description": "Front-end of OpenSPG schema mark language highlighter",
-  "author": "thundax",
-  "keywords": [
-    "OpenSPG",
-    "Schema",
-    "IDEA",
-    "vite",
-    "react"
-  ],
-  "license": "Apache-2.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "clean": "rm -rf dist",
-    "eslint": "eslint \"src/**/*.{ts,tsx}\"",
-    "eslint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
-    "deploy": "export TARGET=\"../openspg-schema-highlighter-idea-plugin/src/main/resources/static\" &&  rm -rf ${TARGET}/* && cp -r ./dist/* ${TARGET}/"
-  },
-  "dependencies": {
-    "@dagrejs/dagre": "^1.1.4",
-    "@emotion/css": "^11.11.2",
-    "@types/d3": "^7.4.3",
-    "@types/d3-hierarchy": "^3.1.7",
-    "@xyflow/react": "^12.4.1",
-    "d3": "^7.9.0",
-    "d3-force": "^3.0.0",
-    "d3-hierarchy": "^3.1.2",
-    "emoji-picker-react": "^4.4.9",
-    "html2canvas": "^1.4.1",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-router-dom": "^7.1.3",
-    "uuid": "^9.0.1"
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^17.6.1",
-    "@commitlint/config-conventional": "^17.6.1",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "@types/uuid": "^9.0.5",
-    "@typescript-eslint/eslint-plugin": "^8.52.0",
-    "@typescript-eslint/parser": "^8.52.0",
-    "@vitejs/plugin-react-swc": "^4.2.2",
-    "eslint": "^9.39.2",
-    "less": "^4.1.3",
-    "less-loader": "^12.2.0",
-    "msw": "^2.10.0",
-    "prettier": "^2.8.8",
-    "typescript": "^5.0.4",
-    "vite": "^7.3.0"
-  },
-  "msw": {
-    "workerDirectory": [
-      "public"
-    ]
-  }
+    "name": "openspg-schema-highlighter",
+    "private": false,
+    "version": "0.0.17",
+    "description": "Front-end of OpenSPG schema mark language highlighter",
+    "author": "thundax",
+    "keywords": [
+        "OpenSPG",
+        "Schema",
+        "IDEA",
+        "vite",
+        "react"
+    ],
+    "license": "Apache-2.0",
+    "main": "index.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "clean": "rm -rf dist",
+        "eslint": "eslint \"src/**/*.{ts,tsx}\"",
+        "eslint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+        "deploy": "export TARGET=\"../openspg-schema-highlighter-idea-plugin/src/main/resources/static\" &&  rm -rf ${TARGET}/* && cp -r ./dist/* ${TARGET}/"
+    },
+    "dependencies": {
+        "@dagrejs/dagre": "^1.1.4",
+        "@emotion/css": "^11.11.2",
+        "@types/d3": "^7.4.3",
+        "@types/d3-hierarchy": "^3.1.7",
+        "@xyflow/react": "^12.4.1",
+        "d3": "^7.9.0",
+        "d3-force": "^3.0.0",
+        "d3-hierarchy": "^3.1.2",
+        "emoji-picker-react": "^4.4.9",
+        "html2canvas": "^1.4.1",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-router-dom": "^7.1.3",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@commitlint/cli": "^17.6.1",
+        "@commitlint/config-conventional": "^17.6.1",
+        "@types/react": "18.2.21",
+        "@types/react-dom": "18.2.7",
+        "@types/uuid": "^9.0.5",
+        "@typescript-eslint/eslint-plugin": "^8.52.0",
+        "@typescript-eslint/parser": "^8.52.0",
+        "@vitejs/plugin-react-swc": "^4.2.2",
+        "eslint": "^9.39.2",
+        "less": "^4.1.3",
+        "less-loader": "^12.2.0",
+        "msw": "^2.10.0",
+        "prettier": "^2.8.8",
+        "typescript": "^5.0.4",
+        "vite": "^7.3.0"
+    }
 }
