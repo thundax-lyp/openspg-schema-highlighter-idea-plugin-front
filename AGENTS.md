@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 This repo is a Vite + React front-end for the OpenSPG schema highlighter. Key paths:
 - `src/` holds app code: `components/`, `pages/`, `hooks/`, `routers/`, `utils/`, `styles/`, and `main.tsx`.
-- `public/` contains static assets copied as-is to the build.
+- `public/` contains static assets copied as-is to the build (including `mockServiceWorker.js`).
 - `mocks/` contains local mock data and MSW handlers (if used).
 - `dist/` is the build output (generated).
 - `index.html`, `vite.config.mts`, and `tsconfig.json` define entry and tooling.
@@ -15,12 +15,13 @@ Use npm scripts from `package.json`:
 - `npm run clean` removes the `dist/` directory.
 - `npm run eslint` runs TypeScript linting on `src/**/*.{ts,tsx}`.
 - `npm run eslint:fix` auto-fixes lintable issues.
+- `npm run msw:init` regenerates `public/mockServiceWorker.js` for local mocks.
 - `npm run deploy` copies `dist/` into the IDEA plugin static resources target.
 
 ## Coding Style & Naming Conventions
 - Indentation: 4 spaces; no tabs.
 - Quotes: single quotes; no trailing commas; no semicolons.
-- Format with Prettier (`.prettierrc.cjs`) and lint with ESLint (`.eslintrc`).
+- Format with Prettier (`.prettierrc.mjs`) and lint with ESLint (`eslint.config.mjs`).
 - Keep component and file names descriptive and aligned with their directory purpose (e.g., `src/components/GraphView.tsx`, `src/pages/SchemaDetail.tsx`).
 
 ## Testing Guidelines

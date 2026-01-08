@@ -19,6 +19,7 @@
         "clean": "rm -rf dist",
         "eslint": "eslint \"src/**/*.{ts,tsx}\"",
         "eslint:fix": "eslint \"src/**/*.{ts,tsx}\" --fix",
+        "msw:init": "npx msw init public/ --save",
         "prettier": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
         "prettier:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
         "deploy": "export TARGET=\"../openspg-schema-highlighter-idea-plugin/src/main/resources/static\" &&  rm -rf ${TARGET}/* && cp -r ./dist/* ${TARGET}/"
