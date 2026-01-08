@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     printWidth: 120, // 最大行长规则通常设置为 100 或 120。
     tabWidth: 4, // 指定每个标签缩进级别的空格数。
     useTabs: false, // 使用制表符而不是空格缩进行。
