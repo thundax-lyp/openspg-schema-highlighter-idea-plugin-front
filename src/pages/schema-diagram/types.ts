@@ -24,7 +24,7 @@ export interface SchemaEntity {
 	autoRelate?: string
 }
 
-const BUILTIN_TYPE = ['ConceptType', 'EntityType', 'EventType', 'StandardType', 'Text', 'String', 'Float', 'Integer'].map(x => x.toLowerCase())
+const BUILTIN_TYPE = ['ConceptType', 'EntityType', 'EventType', 'StandardType', 'Text', 'Float', 'Integer'].map(x => x.toLowerCase())
 
 export const isBuiltinType = (type: string): boolean => {
 	return BUILTIN_TYPE.includes(type.toLowerCase())
