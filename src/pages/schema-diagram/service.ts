@@ -66,6 +66,9 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
 
 
 export const requestSchema = async (): Promise<Schema> => {
+    const emptySchema = {
+        namespace: {}, entities: []
+    }
     try {
         const response = await fetch(`${API_PREFIX}/schema/fetch`, {
             method: 'POST',
@@ -74,6 +77,10 @@ export const requestSchema = async (): Promise<Schema> => {
             },
             body: JSON.stringify({})
         })
+
+        if (!response.ok) {
+            return Promise.resolve(emptySchema)
+        }
 
         const responseBody: ResponseWrapper = await response.json()
 
@@ -87,10 +94,7 @@ export const requestSchema = async (): Promise<Schema> => {
 
     } catch (error) {
         console.error('requestSchema failed', error)
-        return Promise.resolve({
-            namespace: {},
-            entities: []
-        })
+        return Promise.resolve(emptySchema)
     }
 }
 
@@ -103,6 +107,10 @@ export const activateEntities = async (entities: SchemaEntity[]): Promise<boolea
             },
             body: JSON.stringify(entities.map(({id}) => ({id})))
         })
+
+        if (!response.ok) {
+            return Promise.resolve(false)
+        }
 
         const responseBody: ResponseWrapper = await response.json()
 
@@ -117,6 +125,10 @@ export const activateEntities = async (entities: SchemaEntity[]): Promise<boolea
 export const requestCss = async (): Promise<string> => {
     try {
         const response = await fetch(`/schema-theme.css`)
+
+        if (!response.ok) {
+            return Promise.resolve('')
+        }
 
         const responseBody: string = await response.text()
 
