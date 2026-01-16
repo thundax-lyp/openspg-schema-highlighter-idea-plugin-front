@@ -22,7 +22,7 @@
         "msw:init": "npx msw init public/ --save",
         "prettier": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
         "prettier:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,less,md}\"",
-        "deploy": "export TARGET=\"../openspg-schema-highlighter-idea-plugin/src/main/resources/static\" &&  rm -rf ${TARGET}/* && cp -r ./dist/* ${TARGET}/"
+        "deploy": "ts-node scripts/deploy.ts ../openspg-schema-highlighter-idea-plugin/src/main/resources/static"
     },
     "dependencies": {
         "@dagrejs/dagre": "^1.1.4",
@@ -54,6 +54,7 @@
         "less-loader": "^12.2.0",
         "msw": "^2.10.0",
         "prettier": "3.8.0",
+        "ts-node": "^10.9.2",
         "typescript": "^5.0.4",
         "vite": "^7.3.0"
     }
