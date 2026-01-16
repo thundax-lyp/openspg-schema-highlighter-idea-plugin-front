@@ -64,13 +64,8 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
     return entity;
 }
 
-export interface SchemaResult {
-    schema: Schema
-    ok: boolean
-    message?: string
-}
 
-export const requestSchema = async (): Promise<SchemaResult> => {
+export const requestSchema = async (): Promise<Schema> => {
     const emptySchema = {
         namespace: {}, entities: []
     }
@@ -84,35 +79,22 @@ export const requestSchema = async (): Promise<SchemaResult> => {
         })
 
         if (!response.ok) {
-            return Promise.resolve({
-                schema: emptySchema,
-                ok: false,
-                message: `request failed: ${response.status}`
-            })
+            return Promise.resolve(emptySchema)
         }
 
         const responseBody: ResponseWrapper = await response.json()
 
         const {namespace = {}, entities = []} = responseBody?.data || {}
-        const schema = {
+        return Promise.resolve({
             namespace: {
                 value: namespace.value
             },
             entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
-        }
-        return Promise.resolve({
-            schema,
-            ok: responseBody.code === 0,
-            message: responseBody.code === 0 ? undefined : responseBody.message
         })
 
     } catch (error) {
         console.error('requestSchema failed', error)
-        return Promise.resolve({
-            schema: emptySchema,
-            ok: false,
-            message: 'request failed: network error'
-        })
+        return Promise.resolve(emptySchema)
     }
 }
 
