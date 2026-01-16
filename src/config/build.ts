@@ -1,3 +1,1 @@
-
-
-export const BUILD_ID = "0"
+export const BUILD_ID = '0'
