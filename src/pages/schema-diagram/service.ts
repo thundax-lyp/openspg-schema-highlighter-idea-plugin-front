@@ -37,22 +37,22 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
     }
     properties?.forEach(({name, value, children = []}) => {
         if (name === 'desc' && value) {
-            entity.desc = value.trim()
+            entity.desc = `${value}`.trim()
 
         } else if (name === 'index' && value) {
-            entity.index = value.trim()
+            entity.index = `${value}`.trim()
 
         } else if (name === 'hypernymPredicate' && value) {
-            entity.hypernymPredicate = value.trim()
+            entity.hypernymPredicate = `${value}`.trim()
 
         } else if (name === 'regular' && value) {
-            entity.regular = value.trim()
+            entity.regular = `${value}`.trim()
 
         } else if (name === 'spreadable' && typeof value !== "undefined") {
-            entity.spreadable = value.trim()
+            entity.spreadable = `${value}`.trim()
 
         } else if (name === 'autoRelate' && value) {
-            entity.autoRelate = value.trim()
+            entity.autoRelate = `${value}`.trim()
 
         } else if (name === 'properties' && children?.length > 0) {
             entity.properties = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_property_`))
@@ -64,8 +64,13 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
     return entity;
 }
 
+export interface SchemaResult {
+    schema: Schema
+    ok: boolean
+    message?: string
+}
 
-export const requestSchema = async (): Promise<Schema> => {
+export const requestSchema = async (): Promise<SchemaResult> => {
     const emptySchema = {
         namespace: {}, entities: []
     }
@@ -79,22 +84,35 @@ export const requestSchema = async (): Promise<Schema> => {
         })
 
         if (!response.ok) {
-            return Promise.resolve(emptySchema)
+            return Promise.resolve({
+                schema: emptySchema,
+                ok: false,
+                message: `request failed: ${response.status}`
+            })
         }
 
         const responseBody: ResponseWrapper = await response.json()
 
         const {namespace = {}, entities = []} = responseBody?.data || {}
-        return Promise.resolve({
+        const schema = {
             namespace: {
                 value: namespace.value
             },
             entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
+        }
+        return Promise.resolve({
+            schema,
+            ok: responseBody.code === 0,
+            message: responseBody.code === 0 ? undefined : responseBody.message
         })
 
     } catch (error) {
         console.error('requestSchema failed', error)
-        return Promise.resolve(emptySchema)
+        return Promise.resolve({
+            schema: emptySchema,
+            ok: false,
+            message: 'request failed: network error'
+        })
     }
 }
 
