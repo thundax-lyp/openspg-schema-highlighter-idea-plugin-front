@@ -33,24 +33,34 @@ const TurboFlow = (props: TurboFlowProps) => {
     const reactFlow = useReactFlow();
     const [nodes, setNodes, onNodesChange] = useNodesState<Node<TurboNodeData>>([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState<Edge<TurboEdgeData>>([]);
+    const [animateNodes, setAnimateNodes] = useState<boolean>(false);
 
-    //call fitView() after nodes have been initialized, this fitting run only once
+    // call fitView after first layout pass to avoid repeated viewport jumps
     const [initialized, setInitialized] = useState<boolean>(false);
 
+    // keep selection in React Flow and expose it to parent via callback
     useOnSelectionChange({
         onChange: useCallback(({nodes}) => {
             onSelectionChange?.(nodes.map(x => x.data.entity) as SchemaEntity[])
         }, []),
     })
 
-    // initialize nodes and edges
+    // build nodes/edges from entities, then layout once per input change
     useEffect(() => {
+        // trigger temporary slide animation for the new layout
+        setAnimateNodes(true)
+        const animationTimer = window.setTimeout(() => {
+            setAnimateNodes(false)
+        }, 360)
+
+        // normalize entities into nodes, merging with existing node state if possible
         const normalizedNodes: Array<Node<TurboNodeData>> = []
         const normalizedEdges: Array<Edge<TurboEdgeData>> = []
 
         initialEntities.forEach((entity, index) => {
             const {id = ''} = entity
             if (!normalizedNodes.find(x => x.id === id)) {
+                // reuse existing node to preserve React Flow internal state
                 const targetNode = nodes.find(x => x.id === id);
                 if (targetNode) {
                     normalizedNodes.push({
@@ -75,11 +85,13 @@ const TurboFlow = (props: TurboFlowProps) => {
             const schemas = [...properties, ...relations]
             schemas.forEach(({aliasName, types}) => {
                 types?.forEach(type => {
+                    // create edges from referenced entity types
                     const target = initialEntities.find(x => x.name == type)
                     if (target?.id) {
                         const edgeId = `edge__${id}__${target.id}`
                         const targetEdge = normalizedEdges.find(x => x.id == edgeId);
                         if (targetEdge) {
+                            // merge labels when multiple properties point to the same target
                             targetEdge.label = `${targetEdge.label}、${aliasName}`
                         } else {
                             normalizedEdges.push({
@@ -93,15 +105,41 @@ const TurboFlow = (props: TurboFlowProps) => {
                 })
             })
         })
+        // run layout and push nodes/edges into React Flow
         setNodes(layoutNodes({nodes: normalizedNodes, edges: normalizedEdges}));
         setEdges([...normalizedEdges])
+
+        return () => window.clearTimeout(animationTimer)
     }, [initialEntities]);
 
-    // recalculate node position after HTML elements rendered
+    // toggle slide class on nodes during the brief animation window
+    useEffect(() => {
+        setNodes(currentNodes => {
+            return currentNodes.map(node => {
+                const existing = node.className
+                    ? node.className.split(' ').filter(x => x && x !== 'turbo-slide')
+                    : []
+                if (animateNodes) {
+                    existing.push('turbo-slide')
+                }
+                const className = existing.join(' ')
+                if (className === node.className) {
+                    return node
+                }
+                return {
+                    ...node,
+                    className
+                }
+            })
+        })
+    }, [animateNodes, setNodes])
+
+    // re-layout when DOM measurements are available
     useEffect(() => {
         let dirty = false
         const newNodes = nodes.map(node => {
             if (node.measured && (node.measured.width != node.data.layout?.width || node.measured.height != node.data.layout?.height)) {
+                // update node dimensions so layout can avoid overlaps
                 dirty = true
                 return {
                     ...node, data: {
@@ -123,6 +161,7 @@ const TurboFlow = (props: TurboFlowProps) => {
         }
     }, [nodes])
 
+    // sync external selection prop into React Flow node selection state
     useEffect(() => {
         if (initialized && reactFlow) {
             nodes.forEach(node => {
@@ -136,7 +175,7 @@ const TurboFlow = (props: TurboFlowProps) => {
         }
     }, [initialized, reactFlow, selection])
 
-    // auto-fitting layout
+    // fit view once after initialization
     useEffect(() => {
         if (initialized && reactFlow) {
             reactFlow.fitView({

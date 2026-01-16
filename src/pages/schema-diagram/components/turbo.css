@@ -33,6 +33,10 @@
 	box-shadow: var(--node-box-shadow);
 }
 
+.react-flow__node-turbo.turbo-slide {
+	transition: transform 320ms ease;
+}
+
 .react-flow__node-turbo .turbo-body-wrapper {
 	overflow: hidden;
 	display: flex;
@@ -312,4 +316,3 @@
 .react-flow__attribution {
 	display: none;
 }
-
