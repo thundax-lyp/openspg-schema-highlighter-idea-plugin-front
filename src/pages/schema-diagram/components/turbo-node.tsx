@@ -102,7 +102,7 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                                         {types?.map((type, idx) => {
                                             return <div
                                                 key={idx}
-                                                className={`turbo-property-type ${isBuiltinType(type) && "builtin"}`}
+                                                className={`turbo-property-type ${isBuiltinType(type) ? "builtin" : ""}`}
                                                 onClick={() => handleTypeClick(type)}
                                             >
                                                 {type}

@@ -23,9 +23,3 @@ export interface SchemaEntity {
 	spreadable?: string
 	autoRelate?: string
 }
-
-const BUILTIN_TYPE = ['ConceptType', 'EntityType', 'EventType', 'StandardType', 'Text', 'Float', 'Integer'].map(x => x.toLowerCase())
-
-export const isBuiltinType = (type: string): boolean => {
-	return BUILTIN_TYPE.includes(type.toLowerCase())
-}
