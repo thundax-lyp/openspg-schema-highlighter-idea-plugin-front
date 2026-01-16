@@ -22,9 +22,10 @@ const BUILTIN_TYPE_ICONS: {
     'ConceptType': <ConceptIcon/>,
     'EntityType': <EntityIcon/>,
     'EventType': <EventIcon/>,
+    'StandardType': <EntityIcon/>,
+    'Text': <TextIcon/>,
     'Float': <FloatIcon/>,
     'Integer': <IntegerIcon/>,
-    'Text': <TextIcon/>,
 }
 
 const isBuiltinType = (type: string) => {
