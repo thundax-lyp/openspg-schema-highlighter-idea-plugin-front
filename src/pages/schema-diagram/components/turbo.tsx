@@ -42,7 +42,7 @@ const TurboFlow = (props: TurboFlowProps) => {
     useOnSelectionChange({
         onChange: useCallback(({nodes}) => {
             onSelectionChange?.(nodes.map(x => x.data.entity) as SchemaEntity[])
-        }, []),
+        }, [onSelectionChange]),
     })
 
     // build nodes/edges from entities, then layout once per input change
@@ -86,10 +86,10 @@ const TurboFlow = (props: TurboFlowProps) => {
             schemas.forEach(({aliasName, types}) => {
                 types?.forEach(type => {
                     // create edges from referenced entity types
-                    const target = initialEntities.find(x => x.name == type)
+                    const target = initialEntities.find(x => x.name === type)
                     if (target?.id) {
                         const edgeId = `edge__${id}__${target.id}`
-                        const targetEdge = normalizedEdges.find(x => x.id == edgeId);
+                        const targetEdge = normalizedEdges.find(x => x.id === edgeId);
                         if (targetEdge) {
                             // merge labels when multiple properties point to the same target
                             targetEdge.label = `${targetEdge.label}、${aliasName}`
