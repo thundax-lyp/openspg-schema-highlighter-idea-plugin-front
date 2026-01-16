@@ -1,4 +1,4 @@
-export const filterObjectNull = (obj: { [key: string]: any }): any => {
+export const filterObjectNull = (obj: {[key: string]: any}): any => {
     const params = Object.keys(obj)
         .filter((key) => obj[key] !== '' && obj[key] !== null && obj[key] !== undefined)
         .reduce((acc, key) => ({...acc, [key]: obj[key]}), {})

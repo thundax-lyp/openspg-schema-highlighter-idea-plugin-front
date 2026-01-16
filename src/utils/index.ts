@@ -6,4 +6,4 @@ export * from './html-to-image'
 export * from './is'
 export * from './join-trim'
 export * from './transform'
-export * from "./traverse-json"
+export * from './traverse-json'

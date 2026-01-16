@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas'
 export async function htmlToImage(html: string | HTMLElement, title?: string) {
     try {
         title = title ? title : 'openspg-schema-screenshot.png'
-        const ele = typeof html === 'string' ? document.getElementById(html) : html;
+        const ele = typeof html === 'string' ? document.getElementById(html) : html
         const canvas = await html2canvas(ele as HTMLDivElement, {
             useCORS: true
         })
@@ -22,4 +22,3 @@ export async function htmlToImage(html: string | HTMLElement, title?: string) {
         await Promise.reject()
     }
 }
-
