@@ -1,13 +1,13 @@
-import type {Edge, Node} from "@xyflow/react";
-import {DagreLayout, ForceLayout, LayoutEdge, LayoutGroup, LayoutNode} from "./layout";
-import type {TurboNodeData} from "./turbo-node";
-import {TurboEdgeData} from "./turbo-edge";
+import type {Edge, Node} from '@xyflow/react'
+import {DagreLayout, ForceLayout, LayoutEdge, LayoutGroup, LayoutNode} from './layout'
+import type {TurboNodeData} from './turbo-node'
+import {TurboEdgeData} from './turbo-edge'
 
 const groupEdges = (edges: LayoutEdge[]): Array<LayoutEdge[]> => {
     const groups: Array<Set<string>> = []
 
-    edges.forEach(edge => {
-        const group = groups.find(group => group.has(edge.source.id) || group.has(edge.target.id))
+    edges.forEach((edge) => {
+        const group = groups.find((group) => group.has(edge.source.id) || group.has(edge.target.id))
         if (group) {
             group.add(edge.source.id)
             group.add(edge.target.id)
@@ -20,16 +20,16 @@ const groupEdges = (edges: LayoutEdge[]): Array<LayoutEdge[]> => {
         const thisGroup = groups[thisIdx]
         for (let otherIdx = 0; otherIdx < thisIdx; otherIdx += 1) {
             const otherGroup = groups[otherIdx]
-            if ([...thisGroup].some(x => otherGroup.has(x))) {
-                thisGroup.forEach(x => otherGroup.add(x))
+            if ([...thisGroup].some((x) => otherGroup.has(x))) {
+                thisGroup.forEach((x) => otherGroup.add(x))
                 groups.splice(thisIdx, 1)
                 break
             }
         }
     }
 
-    return groups.map(group => {
-        return [...edges.filter(edge => group.has(edge.source.id) || group.has(edge.target.id))]
+    return groups.map((group) => {
+        return [...edges.filter((edge) => group.has(edge.source.id) || group.has(edge.target.id))]
     })
 }
 
@@ -41,38 +41,49 @@ export interface LayoutNodesParam {
 export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>> => {
     const {nodes, edges} = params
 
-    const layoutNodes: Array<LayoutNode> = nodes.map(node => {
+    const layoutNodes: Array<LayoutNode> = nodes.map((node) => {
         const {id, data} = node
         const {x = 0, y = 0, width = 0, height = 0} = data.layout || {}
         return {
-            id, x, y, width, height
+            id,
+            x,
+            y,
+            width,
+            height
         }
     })
 
-    const layoutEdges: Array<LayoutEdge> = edges.map(edge => {
+    const layoutEdges: Array<LayoutEdge> = edges.map((edge) => {
         return {
-            source: {id: edge.source}, target: {id: edge.target}
+            source: {id: edge.source},
+            target: {id: edge.target}
         }
     })
 
     const hasEdges = (node: LayoutNode): boolean => {
-        return !!layoutEdges.find(edge => edge.source.id == node.id || edge.target.id == node.id)
+        return !!layoutEdges.find((edge) => edge.source.id == node.id || edge.target.id == node.id)
     }
 
-    const layoutGroups: LayoutGroup[] = groupEdges(layoutEdges).map(edges => {
-        return {
-            nodes: layoutNodes.filter(node => edges.some(edge => edge.source.id == node.id || edge.target.id == node.id)),
-            edges
-        }
-    }).map(({nodes, edges}) => {
-        return {
-            nodes: ForceLayout().layout({nodes, edges}), edges
-        }
-    })
+    const layoutGroups: LayoutGroup[] = groupEdges(layoutEdges)
+        .map((edges) => {
+            return {
+                nodes: layoutNodes.filter((node) =>
+                    edges.some((edge) => edge.source.id == node.id || edge.target.id == node.id)
+                ),
+                edges
+            }
+        })
+        .map(({nodes, edges}) => {
+            return {
+                nodes: ForceLayout().layout({nodes, edges}),
+                edges
+            }
+        })
 
     layoutGroups.push({
         nodes: DagreLayout({direction: 'LR'}).layout({
-            nodes: layoutNodes.filter(x => !hasEdges(x)), edges: []
+            nodes: layoutNodes.filter((x) => !hasEdges(x)),
+            edges: []
         }),
         edges: []
     })
@@ -80,10 +91,13 @@ export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>
     // save layout position into TurboNode
     layoutGroups.forEach((layoutGroup) => {
         layoutGroup.nodes.forEach(({id, x = 0, y = 0, width = 0, height = 0}) => {
-            const turboNode = nodes.find(x => x.id === id)
+            const turboNode = nodes.find((x) => x.id === id)
             if (turboNode) {
                 turboNode.data.layout = {
-                    x, y, width, height
+                    x,
+                    y,
+                    width,
+                    height
                 }
             }
         })
@@ -95,7 +109,7 @@ export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>
         const left = Math.min(...nodes.map(({x = 0}) => x))
         const top = Math.min(...nodes.map(({y = 0}) => y))
         const bottom = Math.max(...nodes.map(({y = 0, height = 0}) => y + height))
-        nodes.forEach(layoutNode => {
+        nodes.forEach((layoutNode) => {
             layoutNode.x = (layoutNode.x || 0) - left
             layoutNode.y = (layoutNode.y || 0) - top + lastGroupBottom
         })
@@ -103,16 +117,18 @@ export const layoutNodes = (params: LayoutNodesParam): Array<Node<TurboNodeData>
     })
 
     // update position to TurboNode
-    return layoutGroups.flatMap(layoutGroup => {
-        return layoutGroup.nodes.map(layoutNode => {
-            const node = nodes.find(x => x.id == layoutNode.id)
-            if (node) {
-                node.position = {
-                    x: layoutNode.x || 0,
-                    y: layoutNode.y || 0
+    return layoutGroups.flatMap((layoutGroup) => {
+        return layoutGroup.nodes
+            .map((layoutNode) => {
+                const node = nodes.find((x) => x.id == layoutNode.id)
+                if (node) {
+                    node.position = {
+                        x: layoutNode.x || 0,
+                        y: layoutNode.y || 0
+                    }
                 }
-            }
-            return node
-        }).filter(x => !!x)
+                return node
+            })
+            .filter((x) => !!x)
     })
 }
