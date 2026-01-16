@@ -96,7 +96,7 @@ const CubicBezierEdge = (props: EdgeProps<Edge<TurboEdgeData>>) => {
     }
 
     const edges = useEdges<Edge<TurboEdgeData>>()
-        .filter(x => x.source == source || x.target == source)
+        .filter(x => x.source === source || x.target === source)
         .filter(x => x.source != source || x.target != source)
 
     const nodePositions = useNodes<Node<TurboNodeData>>()
@@ -199,7 +199,7 @@ export const TurboEdge = (props: EdgeProps<Edge<TurboEdgeData>>): ReactNode => {
     }
 
 
-    if (source == target) {
+    if (source === target) {
         return <CubicBezierEdge {...props}/>
     }
 
