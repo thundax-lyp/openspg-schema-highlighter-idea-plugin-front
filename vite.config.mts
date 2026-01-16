@@ -1,13 +1,21 @@
 import {defineConfig, loadEnv} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import {resolve} from 'path'
+import {rm} from 'fs/promises'
 
 
 export default defineConfig(({mode}) => {
     const {VITE_PUBLIC_PATH} = loadEnv(mode, process.cwd(), "");
     return {
         plugins: [
-            react()
+            react(),
+            {
+                name: 'remove-mock-service-worker',
+                apply: 'build',
+                closeBundle: async () => {
+                    await rm(resolve(__dirname, 'dist/mockServiceWorker.js'), {force: true})
+                }
+            }
         ],
         build: {
             outDir: 'dist'
