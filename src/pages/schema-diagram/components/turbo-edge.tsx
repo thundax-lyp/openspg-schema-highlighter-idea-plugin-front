@@ -100,7 +100,7 @@ const CubicBezierEdge = (props: EdgeProps<Edge<TurboEdgeData>>) => {
         .filter(x => x.source != source || x.target != source)
 
     const nodePositions = useNodes<Node<TurboNodeData>>()
-        .filter(x => x.id != source && edges.find(e => e.source === x.id || e.target === x.id))
+        .filter(x => x.id !== source && edges.find(e => e.source === x.id || e.target === x.id))
         .map(x => useInternalNode(x.id))
         .filter(x => !!x)
         .map(x => getNodeCenterXY(x))
