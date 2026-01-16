@@ -5,12 +5,7 @@ type GlobalProps = {
 }
 
 const Global = (props: GlobalProps) => {
-
-    return (
-        <>
-            {props.children}
-        </>
-    )
+    return <>{props.children}</>
 }
 
 export default Global
