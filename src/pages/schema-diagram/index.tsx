@@ -14,6 +14,7 @@ const SchemaDiagramPage = () => {
 
     const [schemaVersion, setSchemaVersion] = useState<number>(0);
     const debouncedSchemaVersion = useDebounce<number>(schemaVersion, 500);
+    const debouncedSelection = useDebounce<SchemaEntity[]>(selectedEntities || [], 300);
 
     const [cssStyle, setCssStyle] = useState<string>("");
 
@@ -50,6 +51,14 @@ const SchemaDiagramPage = () => {
         requestSchema()
     }, [])
 
+    useEffect(() => {
+        if (debouncedSelection.length > 0) {
+            service.activateEntities(debouncedSelection).then(() => {
+                console.log('activate entities success')
+            })
+        }
+    }, [debouncedSelection])
+
     const toolbarItemStyle = {
         padding: "8px",
         border: "solid 1px #00f",
@@ -69,9 +78,6 @@ const SchemaDiagramPage = () => {
                     selection={selectedEntities}
                     onSelectionChange={(entities) => {
                         setSelectedEntities(entities)
-                        service.activateEntities(entities).then(() => {
-                            console.log('activate entities success')
-                        })
                     }}
                 />
             </div>
