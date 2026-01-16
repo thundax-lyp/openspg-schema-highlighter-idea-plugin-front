@@ -97,7 +97,7 @@ const CubicBezierEdge = (props: EdgeProps<Edge<TurboEdgeData>>) => {
 
     const edges = useEdges<Edge<TurboEdgeData>>()
         .filter(x => x.source === source || x.target === source)
-        .filter(x => x.source != source || x.target != source)
+        .filter(x => x.source !== source || x.target !== source)
 
     const nodePositions = useNodes<Node<TurboNodeData>>()
         .filter(x => x.id !== source && edges.find(e => e.source === x.id || e.target === x.id))
