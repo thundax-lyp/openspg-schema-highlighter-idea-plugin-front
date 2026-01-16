@@ -66,45 +66,66 @@ const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, ind
 
 
 export const requestSchema = async (): Promise<Schema> => {
-    const response = await fetch(`${API_PREFIX}/schema/fetch`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-    })
+    try {
+        const response = await fetch(`${API_PREFIX}/schema/fetch`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
 
-    const responseBody: ResponseWrapper = await response.json()
+        const responseBody: ResponseWrapper = await response.json()
 
-    const {namespace = {}, entities = []} = responseBody?.data || {}
-    return Promise.resolve({
-        namespace: {
-            value: namespace.value
-        },
-        entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
-    })
+        const {namespace = {}, entities = []} = responseBody?.data || {}
+        return Promise.resolve({
+            namespace: {
+                value: namespace.value
+            },
+            entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
+        })
+
+    } catch (error) {
+        console.error('requestSchema failed', error)
+        return Promise.resolve({
+            namespace: {},
+            entities: []
+        })
+    }
 }
 
 export const activateEntities = async (entities: SchemaEntity[]): Promise<boolean> => {
-    const response = await fetch(`${API_PREFIX}/schema/focus`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(entities.map(({id}) => ({id})))
-    })
+    try {
+        const response = await fetch(`${API_PREFIX}/schema/focus`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(entities.map(({id}) => ({id})))
+        })
 
-    const responseBody: ResponseWrapper = await response.json()
+        const responseBody: ResponseWrapper = await response.json()
 
-    return Promise.resolve(responseBody.code === 0)
+        return Promise.resolve(responseBody.code === 0)
+
+    } catch (error) {
+        console.error('activateEntities failed', error)
+        return Promise.resolve(false)
+    }
 }
 
 export const requestCss = async (): Promise<string> => {
-    const response = await fetch(`/schema-theme.css`)
+    try {
+        const response = await fetch(`/schema-theme.css`)
 
-    const responseBody: string = await response.text()
+        const responseBody: string = await response.text()
 
-    return Promise.resolve(responseBody)
+        return Promise.resolve(responseBody)
+
+    } catch (error) {
+        console.error('requestCss failed', error)
+        return Promise.resolve('')
+    }
 }
 
 export default {
