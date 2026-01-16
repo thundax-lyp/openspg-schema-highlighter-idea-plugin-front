@@ -3,7 +3,6 @@ import {useRoutes} from 'react-router-dom'
 import {webRouter} from '@/routers'
 
 function App() {
-
     const routers: Array<any> = useMemo(() => {
         return [...webRouter]
     }, [])

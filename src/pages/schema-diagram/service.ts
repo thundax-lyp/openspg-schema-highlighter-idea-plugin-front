@@ -1,4 +1,4 @@
-import {Schema, SchemaEntity} from "./types"
+import {Schema, SchemaEntity} from './types'
 
 const API_PREFIX = `/openspg/api`
 
@@ -31,43 +31,43 @@ interface PropertyVO {
     children?: EntityVO[]
 }
 
-const normalizeEntity = ({id, name, aliasName, types, properties}: EntityVO, index: number, prefix = ''): SchemaEntity => {
+const normalizeEntity = (
+    {id, name, aliasName, types, properties}: EntityVO,
+    index: number,
+    prefix = ''
+): SchemaEntity => {
     const entity: SchemaEntity = {
-        id: `${prefix}${id || index}`, name, aliasName, types
+        id: `${prefix}${id || index}`,
+        name,
+        aliasName,
+        types
     }
     properties?.forEach(({name, value, children = []}) => {
         if (name === 'desc' && value) {
             entity.desc = `${value}`.trim()
-
         } else if (name === 'index' && value) {
             entity.index = `${value}`.trim()
-
         } else if (name === 'hypernymPredicate' && value) {
             entity.hypernymPredicate = `${value}`.trim()
-
         } else if (name === 'regular' && value) {
             entity.regular = `${value}`.trim()
-
-        } else if (name === 'spreadable' && typeof value !== "undefined") {
+        } else if (name === 'spreadable' && typeof value !== 'undefined') {
             entity.spreadable = `${value}`.trim()
-
         } else if (name === 'autoRelate' && value) {
             entity.autoRelate = `${value}`.trim()
-
         } else if (name === 'properties' && children?.length > 0) {
             entity.properties = children.map((x, index) => normalizeEntity(x, index, `${entity.id}_property_`))
-
         } else if (name === 'relations' && children?.length > 0) {
             entity.relations = children.map((x, index) => normalizeEntity(x, index, `${entity.id}__relation_`))
         }
     })
-    return entity;
+    return entity
 }
-
 
 export const requestSchema = async (): Promise<Schema> => {
     const emptySchema = {
-        namespace: {}, entities: []
+        namespace: {},
+        entities: []
     }
     try {
         const response = await fetch(`${API_PREFIX}/schema/fetch`, {
@@ -89,9 +89,8 @@ export const requestSchema = async (): Promise<Schema> => {
             namespace: {
                 value: namespace.value
             },
-            entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter(x => x)
+            entities: entities.map((x, index) => normalizeEntity(x, index, 'schema-')).filter((x) => x)
         })
-
     } catch (error) {
         console.error('requestSchema failed', error)
         return Promise.resolve(emptySchema)
@@ -115,7 +114,6 @@ export const activateEntities = async (entities: SchemaEntity[]): Promise<boolea
         const responseBody: ResponseWrapper = await response.json()
 
         return Promise.resolve(responseBody.code === 0)
-
     } catch (error) {
         console.error('activateEntities failed', error)
         return Promise.resolve(false)
@@ -133,7 +131,6 @@ export const requestCss = async (): Promise<string> => {
         const responseBody: string = await response.text()
 
         return Promise.resolve(responseBody)
-
     } catch (error) {
         console.error('requestCss failed', error)
         return Promise.resolve('')
@@ -143,5 +140,5 @@ export const requestCss = async (): Promise<string> => {
 export default {
     requestSchema,
     activateEntities,
-    requestCss,
+    requestCss
 }
