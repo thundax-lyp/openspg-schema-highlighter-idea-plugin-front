@@ -51,31 +51,26 @@ const SchemaDiagramPage = () => {
      */
     useEffect(() => {
         const handler = (event: MessageEvent) => {
-            const {type, payload = {}} = event.data;
+            const {type, payload = {}} = event.data
             if (type === 'schema-diagram.refresh') {
                 setSchemaVersion(new Date().getTime())
-
             } else if (type === 'schema-diagram.refresh-theme') {
                 service.requestCss().then((x) => {
                     setCssStyle(x)
                 })
-
             } else if (type === 'schema-diagram.activate-entity') {
                 const currentEntities = entities.filter((x) => x.name === payload.name)
-                console.log(currentEntities)
                 setSelectedEntities([...currentEntities])
             }
         }
 
-        window.addEventListener("message", handler);
-        return () => window.removeEventListener("message", handler);
-    }, []);
+        window.addEventListener('message', handler)
+        return () => window.removeEventListener('message', handler)
+    }, [])
 
     useEffect(() => {
         if (debouncedSelection.length > 0) {
-            service.activateEntities(debouncedSelection).then(() => {
-                console.log('activate entities success')
-            })
+            void service.activateEntities(debouncedSelection)
         }
     }, [debouncedSelection])
 
