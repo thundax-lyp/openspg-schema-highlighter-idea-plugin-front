@@ -66,7 +66,7 @@ const SchemaDiagramPage = () => {
 
         window.addEventListener('message', handler)
         return () => window.removeEventListener('message', handler)
-    }, [])
+    }, [entities])
 
     useEffect(() => {
         if (debouncedSelection.length > 0) {
