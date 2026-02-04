@@ -46,7 +46,7 @@ const SchemaDiagramPage = () => {
      * ```
      * 3. activate entity
      * ```js
-     * window.postMessage({action: 'openspg.command', payload: {type: 'activate-entity', name: 'Node1'}})
+     * window.postMessage({action: 'openspg.command', payload: {type: 'activate-entity', args: {name: 'Node1'}}})
      * ```
      */
     useEffect(() => {
@@ -60,7 +60,7 @@ const SchemaDiagramPage = () => {
                     service.requestCss().then((x) => {
                         setCssStyle(x);
                     });
-                } else if (action === 'activate-entity') {
+                } else if (type === 'activate-entity') {
                     const currentEntities = entities.filter((x) => x.name === args.name);
                     setSelectedEntities([...currentEntities]);
                 }
