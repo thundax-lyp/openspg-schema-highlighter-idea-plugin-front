@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const EventIcon = () => {
     return (
@@ -7,5 +7,5 @@ export const EventIcon = () => {
                 <polygon fill="#40B6E0" fillOpacity=".9" points="7 16 10 10 2.5 10 10 1 8.5 7 14.5 7" />
             </g>
         </svg>
-    )
-}
+    );
+};

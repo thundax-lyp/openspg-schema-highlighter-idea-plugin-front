@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const PinIcon = () => {
     return (
@@ -20,5 +20,5 @@ export const PinIcon = () => {
                 </g>
             </g>
         </svg>
-    )
-}
+    );
+};

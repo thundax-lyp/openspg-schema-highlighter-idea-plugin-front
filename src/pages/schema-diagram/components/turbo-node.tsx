@@ -1,23 +1,32 @@
-import React, {memo, ReactNode} from 'react'
+import React, { memo, ReactNode } from 'react';
 
-import {Handle, type Node, type NodeProps, Position} from '@xyflow/react'
-import {SchemaEntity} from '../types'
-import {ConceptIcon, EntityIcon, EventIcon, FloatIcon, IntegerIcon, PropertyIcon, RelationIcon, TextIcon} from './icons'
+import { Handle, type Node, type NodeProps, Position } from '@xyflow/react';
+import { SchemaEntity } from '../types';
+import {
+    ConceptIcon,
+    EntityIcon,
+    EventIcon,
+    FloatIcon,
+    IntegerIcon,
+    PropertyIcon,
+    RelationIcon,
+    TextIcon
+} from './icons';
 
 export type TurboNodeRect = {
-    x?: number
-    y?: number
-    width?: number
-    height?: number
-}
+    x?: number;
+    y?: number;
+    width?: number;
+    height?: number;
+};
 
 export type TurboNodeData = {
-    entity?: SchemaEntity
-    layout?: TurboNodeRect
-}
+    entity?: SchemaEntity;
+    layout?: TurboNodeRect;
+};
 
 const BUILTIN_TYPE_ICONS: {
-    [key: string]: ReactNode
+    [key: string]: ReactNode;
 } = {
     ConceptType: <ConceptIcon />,
     EntityType: <EntityIcon />,
@@ -26,31 +35,31 @@ const BUILTIN_TYPE_ICONS: {
     Text: <TextIcon />,
     Float: <FloatIcon />,
     Integer: <IntegerIcon />
-}
+};
 
 const isBuiltinType = (type: string) => {
-    return Object.keys(BUILTIN_TYPE_ICONS).includes(type)
-}
+    return Object.keys(BUILTIN_TYPE_ICONS).includes(type);
+};
 
 export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode => {
-    const {data = {}} = props
+    const { data = {} } = props;
 
-    const {entity = {}} = data
-    const builtinTypes = (entity.types || []).filter((x) => isBuiltinType(x))
+    const { entity = {} } = data;
+    const builtinTypes = (entity.types || []).filter((x) => isBuiltinType(x));
 
     const handleTypeClick = (type: string) => {
         if (!isBuiltinType(type)) {
-            console.log(`${type} click`)
+            console.log(`${type} click`);
         }
-    }
+    };
 
     const properties = (entity.properties || []).filter((property) => {
-        return (property.types || []).filter((x) => isBuiltinType(x)).length > 0
-    })
+        return (property.types || []).filter((x) => isBuiltinType(x)).length > 0;
+    });
 
     const relations = (entity.relations || []).filter((relation) => {
-        return (relation.types || []).filter((x) => isBuiltinType(x)).length > 0
-    })
+        return (relation.types || []).filter((x) => isBuiltinType(x)).length > 0;
+    });
 
     return (
         <>
@@ -60,7 +69,7 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                         <div className="turbo-cloud gradient" key={idx}>
                             <div>{BUILTIN_TYPE_ICONS[type]}</div>
                         </div>
-                    )
+                    );
                 })}
             </div>
             <div className="turbo-body-wrapper gradient">
@@ -73,7 +82,7 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                         {properties.length > 0 && (
                             <div className="turbo-properties-container">
                                 {properties.map((property) => {
-                                    const {id, name, aliasName, types} = property
+                                    const { id, name, aliasName, types } = property;
                                     return (
                                         <div key={id} className="turbo-property">
                                             <div className="turbo-property-icon">
@@ -93,18 +102,18 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                                                         >
                                                             {type}
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         )}
                         {relations.length > 0 && (
                             <div className="turbo-relations-container">
                                 {relations.map((relation) => {
-                                    const {id, name, aliasName, types} = relation
+                                    const { id, name, aliasName, types } = relation;
                                     return (
                                         <div key={id} className="turbo-property">
                                             <div className="turbo-relation-icon">
@@ -124,11 +133,11 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                                                         >
                                                             {type}
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         )}
@@ -138,5 +147,5 @@ export const TurboNode = memo((props: NodeProps<Node<TurboNodeData>>): ReactNode
                 </div>
             </div>
         </>
-    )
-})
+    );
+});

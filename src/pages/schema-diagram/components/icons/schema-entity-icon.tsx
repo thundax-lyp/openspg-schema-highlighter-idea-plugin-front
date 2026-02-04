@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const SchemaEntityIcon = () => {
     return (
@@ -11,5 +11,5 @@ export const SchemaEntityIcon = () => {
                 />
             </g>
         </svg>
-    )
-}
+    );
+};

@@ -1,16 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import {BrowserRouter} from 'react-router-dom'
-import Global from './components/global'
-import App from './pages/app'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import Global from './components/global';
+import App from './pages/app';
 
-import '@/styles/global.less'
-import Loading from '@/components/loading'
+import '@/styles/global.less';
+import Loading from '@/components/loading';
 
 const bootstrap = async () => {
     if (import.meta.env.DEV) {
-        const {worker} = await import('../mocks/browser')
-        await worker.start({onUnhandledRequest: 'bypass'})
+        const { worker } = await import('../mocks/browser');
+        await worker.start({ onUnhandledRequest: 'bypass' });
     }
 
     ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
@@ -36,7 +36,7 @@ const bootstrap = async () => {
                 </React.Suspense>
             </Global>
         </BrowserRouter>
-    )
-}
+    );
+};
 
-void bootstrap()
+void bootstrap();

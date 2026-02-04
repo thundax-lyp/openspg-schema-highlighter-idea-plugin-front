@@ -1,4 +1,4 @@
-import styles from './index.module.less'
+import styles from './index.module.less';
 
 function Page404() {
     return (
@@ -11,13 +11,13 @@ function Page404() {
             <div
                 className={styles.page404_button}
                 onClick={() => {
-                    location.href = '/'
+                    location.href = '/';
                 }}
             >
                 回到首页
             </div>
         </div>
-    )
+    );
 }
 
-export default Page404
+export default Page404;

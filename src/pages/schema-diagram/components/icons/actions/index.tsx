@@ -1,1 +1,1 @@
-export * from './download-icon'
+export * from './download-icon';

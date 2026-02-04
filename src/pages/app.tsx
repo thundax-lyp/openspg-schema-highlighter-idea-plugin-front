@@ -1,13 +1,13 @@
-import {useMemo} from 'react'
-import {useRoutes} from 'react-router-dom'
-import {webRouter} from '@/routers'
+import { useMemo } from 'react';
+import { useRoutes } from 'react-router-dom';
+import { webRouter } from '@/routers';
 
 function App() {
     const routers: Array<any> = useMemo(() => {
-        return [...webRouter]
-    }, [])
+        return [...webRouter];
+    }, []);
 
-    return useRoutes([...routers])
+    return useRoutes([...routers]);
 }
 
-export default App
+export default App;

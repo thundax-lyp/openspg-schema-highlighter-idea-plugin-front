@@ -1,13 +1,13 @@
-import styles from './index.module.less'
+import styles from './index.module.less';
 
 export interface LoadingProps {
-    rotate?: boolean
-    width?: string
-    height?: string
+    rotate?: boolean;
+    width?: string;
+    height?: string;
 }
 
 const Loading = (props: LoadingProps) => {
-    const {rotate, width = '1.2em', height = '1.2em'} = props || {}
+    const { rotate, width = '1.2em', height = '1.2em' } = props || {};
 
     return (
         <svg
@@ -23,7 +23,7 @@ const Loading = (props: LoadingProps) => {
                 fill="currentColor"
             />
         </svg>
-    )
-}
+    );
+};
 
-export default Loading
+export default Loading;

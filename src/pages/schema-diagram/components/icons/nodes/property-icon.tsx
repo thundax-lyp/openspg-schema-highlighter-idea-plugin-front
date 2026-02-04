@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const PropertyIcon = () => {
     return (
@@ -11,5 +11,5 @@ export const PropertyIcon = () => {
                 />
             </g>
         </svg>
-    )
-}
+    );
+};

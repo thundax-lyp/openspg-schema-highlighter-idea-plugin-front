@@ -1,13 +1,13 @@
-import React from 'react'
-import type {RouteObject} from 'react-router-dom'
+import React from 'react';
+import type { RouteObject } from 'react-router-dom';
 
 export interface RouteOptions extends Omit<Omit<RouteObject, 'children'>, 'index'> {
-    index?: boolean
-    children?: RouteOptions[]
+    index?: boolean;
+    children?: RouteOptions[];
 }
 
-const SchemaDiagramPage = React.lazy(() => import('@/pages/schema-diagram'))
-const Page404 = React.lazy(() => import('@/pages/404'))
+const SchemaDiagramPage = React.lazy(() => import('@/pages/schema-diagram'));
+const Page404 = React.lazy(() => import('@/pages/404'));
 
 export const webRouter: RouteOptions[] = [
     {
@@ -28,6 +28,6 @@ export const webRouter: RouteOptions[] = [
         element: <Page404 />,
         children: []
     }
-]
+];
 
-export default {}
+export default {};

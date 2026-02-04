@@ -1,2 +1,2 @@
-export * from './property-icon'
-export * from './relation-icon'
+export * from './property-icon';
+export * from './relation-icon';

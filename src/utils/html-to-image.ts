@@ -1,24 +1,24 @@
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas';
 
 export async function htmlToImage(html: string | HTMLElement, title?: string) {
     try {
-        title = title ? title : 'openspg-schema-screenshot.png'
-        const ele = typeof html === 'string' ? document.getElementById(html) : html
+        title = title ? title : 'openspg-schema-screenshot.png';
+        const ele = typeof html === 'string' ? document.getElementById(html) : html;
         const canvas = await html2canvas(ele as HTMLDivElement, {
             useCORS: true
-        })
-        const imgUrl = canvas.toDataURL('image/png')
-        const tempLink = document.createElement('a')
-        tempLink.style.display = 'none'
-        tempLink.href = imgUrl
-        tempLink.setAttribute('download', title)
-        if (typeof tempLink.download === 'undefined') tempLink.setAttribute('target', '_blank')
-        document.body.appendChild(tempLink)
-        tempLink.click()
-        document.body.removeChild(tempLink)
-        window.URL.revokeObjectURL(imgUrl)
-        await Promise.resolve()
+        });
+        const imgUrl = canvas.toDataURL('image/png');
+        const tempLink = document.createElement('a');
+        tempLink.style.display = 'none';
+        tempLink.href = imgUrl;
+        tempLink.setAttribute('download', title);
+        if (typeof tempLink.download === 'undefined') tempLink.setAttribute('target', '_blank');
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        window.URL.revokeObjectURL(imgUrl);
+        await Promise.resolve();
     } catch {
-        await Promise.reject()
+        await Promise.reject();
     }
 }

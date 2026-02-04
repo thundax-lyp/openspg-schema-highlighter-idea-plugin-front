@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
 type GlobalProps = {
-    children: React.ReactElement
-}
+    children: React.ReactElement;
+};
 
 const Global = (props: GlobalProps) => {
-    return <>{props.children}</>
-}
+    return <>{props.children}</>;
+};
 
-export default Global
+export default Global;

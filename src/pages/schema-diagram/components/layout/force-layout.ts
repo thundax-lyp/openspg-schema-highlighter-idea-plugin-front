@@ -1,59 +1,59 @@
-import {Layout, LayoutEdge, LayoutGroup, LayoutNode} from './types'
-import * as d3 from 'd3'
-import {Simulation, SimulationLinkDatum, SimulationNodeDatum} from 'd3-force'
+import { Layout, LayoutEdge, LayoutGroup, LayoutNode } from './types';
+import * as d3 from 'd3';
+import { Simulation, SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 
 interface NodeDatum extends SimulationNodeDatum {
-    id: string
+    id: string;
 }
 
 interface LinksDatum extends SimulationLinkDatum<NodeDatum> {
-    source: number
-    target: number
+    source: number;
+    target: number;
 }
 
 export const ForceLayout = (): Layout => {
     const normalizeLayoutGroup = (nodes: LayoutNode[], edges: LayoutEdge[]): [NodeDatum[], LinksDatum[]] => {
-        const layoutNodes: NodeDatum[] = nodes.map(({id, x = 0, y = 0, width = 0, height = 0}) => ({
+        const layoutNodes: NodeDatum[] = nodes.map(({ id, x = 0, y = 0, width = 0, height = 0 }) => ({
             id,
             x: x + width / 2,
             y: y + height / 2,
             width,
             height
-        }))
+        }));
 
         const layoutEdges: LinksDatum[] = edges
-            .filter(({source, target}) => source.id != target.id)
-            .map(({source, target}) => {
+            .filter(({ source, target }) => source.id != target.id)
+            .map(({ source, target }) => {
                 return {
                     source: nodes.findIndex((x) => x.id == source.id),
                     target: nodes.findIndex((x) => x.id == target.id)
-                }
+                };
             })
-            .filter(({source, target}) => source >= 0 && target >= 0)
-        return [layoutNodes, layoutEdges]
-    }
+            .filter(({ source, target }) => source >= 0 && target >= 0);
+        return [layoutNodes, layoutEdges];
+    };
 
     const run = (simulation: Simulation<NodeDatum, undefined>) => {
-        const maxStep = 100
+        const maxStep = 100;
         for (let step = 0; step < maxStep; step++) {
-            simulation.tick(10)
-            const activeNodes = simulation.nodes().filter(({vx = 0, vy = 0}) => {
-                return Math.abs(vx) > 0.01 || Math.abs(vy) > 0.01
-            })
+            simulation.tick(10);
+            const activeNodes = simulation.nodes().filter(({ vx = 0, vy = 0 }) => {
+                return Math.abs(vx) > 0.01 || Math.abs(vy) > 0.01;
+            });
             if (activeNodes.length == 0) {
-                break
+                break;
             }
         }
-        return simulation
-    }
+        return simulation;
+    };
 
     const layout = (param: LayoutGroup): Array<LayoutNode> => {
-        const {nodes, edges} = param
+        const { nodes, edges } = param;
         if (nodes.length == 0) {
-            return []
+            return [];
         }
 
-        const [layoutNodes, layoutEdges] = normalizeLayoutGroup(nodes, edges)
+        const [layoutNodes, layoutEdges] = normalizeLayoutGroup(nodes, edges);
 
         const simulation = d3
             .forceSimulation(layoutNodes)
@@ -65,35 +65,35 @@ export const ForceLayout = (): Layout => {
                 'collision',
                 d3
                     .forceCollide()
-                    .radius(({index = -1}) => {
+                    .radius(({ index = -1 }) => {
                         if (index < 0 || index >= nodes.length) {
-                            return 60
+                            return 60;
                         }
-                        const node = nodes[index]
-                        const {width = 0, height = 0} = node || {}
-                        return Math.sqrt(width ** 2 + height ** 2)
+                        const node = nodes[index];
+                        const { width = 0, height = 0 } = node || {};
+                        return Math.sqrt(width ** 2 + height ** 2);
                     })
                     .strength(0.7)
             )
             .force('center', d3.forceCenter(300, 300))
             .force('y', d3.forceY().strength(0.5))
-            .restart()
+            .restart();
 
         return run(simulation)
             .nodes()
-            .map(({id, x = 0, y = 0}) => {
-                const node = nodes.find((x) => x.id == id)
-                const {width = 0, height = 0} = node || {}
+            .map(({ id, x = 0, y = 0 }) => {
+                const node = nodes.find((x) => x.id == id);
+                const { width = 0, height = 0 } = node || {};
                 return Object.assign({}, node, {
                     x: x + width / 2,
                     y: y + height / 2
-                }) as LayoutNode
+                }) as LayoutNode;
             })
-            .filter(({id}) => !!id)
-    }
+            .filter(({ id }) => !!id);
+    };
 
     return {
         name: 'ForceLayout',
         layout
-    }
-}
+    };
+};

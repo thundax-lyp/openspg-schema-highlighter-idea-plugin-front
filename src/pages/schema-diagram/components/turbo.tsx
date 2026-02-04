@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Background,
     ConnectionMode,
@@ -11,60 +11,60 @@ import {
     useNodesState,
     useOnSelectionChange,
     useReactFlow
-} from '@xyflow/react'
+} from '@xyflow/react';
 
-import {type TurboNodeData, TurboNode} from './turbo-node'
-import {type TurboEdgeData, TurboEdge} from './turbo-edge'
-import {layoutNodes} from './layout-nodes'
-import {SchemaEntity} from '../types'
+import { type TurboNodeData, TurboNode } from './turbo-node';
+import { type TurboEdgeData, TurboEdge } from './turbo-edge';
+import { layoutNodes } from './layout-nodes';
+import { SchemaEntity } from '../types';
 
-import '@xyflow/react/dist/base.css'
-import './turbo.css'
+import '@xyflow/react/dist/base.css';
+import './turbo.css';
 
 export type TurboFlowProps = {
-    initialEntities?: SchemaEntity[]
-    selection?: SchemaEntity[]
-    onSelectionChange?: (entities: SchemaEntity[]) => void
-}
+    initialEntities?: SchemaEntity[];
+    selection?: SchemaEntity[];
+    onSelectionChange?: (entities: SchemaEntity[]) => void;
+};
 
 const TurboFlow = (props: TurboFlowProps) => {
-    const {initialEntities = [], selection = [], onSelectionChange} = props
+    const { initialEntities = [], selection = [], onSelectionChange } = props;
 
-    const reactFlow = useReactFlow()
-    const [nodes, setNodes, onNodesChange] = useNodesState<Node<TurboNodeData>>([])
-    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge<TurboEdgeData>>([])
-    const [animateNodes, setAnimateNodes] = useState<boolean>(false)
+    const reactFlow = useReactFlow();
+    const [nodes, setNodes, onNodesChange] = useNodesState<Node<TurboNodeData>>([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState<Edge<TurboEdgeData>>([]);
+    const [animateNodes, setAnimateNodes] = useState<boolean>(false);
 
     // call fitView after first layout pass to avoid repeated viewport jumps
-    const [initialized, setInitialized] = useState<boolean>(false)
+    const [initialized, setInitialized] = useState<boolean>(false);
 
     // keep selection in React Flow and expose it to parent via callback
     useOnSelectionChange({
         onChange: useCallback(
-            ({nodes}) => {
-                onSelectionChange?.(nodes.map((x) => x.data.entity) as SchemaEntity[])
+            ({ nodes }) => {
+                onSelectionChange?.(nodes.map((x) => x.data.entity) as SchemaEntity[]);
             },
             [onSelectionChange]
         )
-    })
+    });
 
     // build nodes/edges from entities, then layout once per input change
     useEffect(() => {
         // trigger temporary slide animation for the new layout
-        setAnimateNodes(true)
+        setAnimateNodes(true);
         const animationTimer = window.setTimeout(() => {
-            setAnimateNodes(false)
-        }, 360)
+            setAnimateNodes(false);
+        }, 360);
 
         // normalize entities into nodes, merging with existing node state if possible
-        const normalizedNodes: Array<Node<TurboNodeData>> = []
-        const normalizedEdges: Array<Edge<TurboEdgeData>> = []
+        const normalizedNodes: Array<Node<TurboNodeData>> = [];
+        const normalizedEdges: Array<Edge<TurboEdgeData>> = [];
 
         initialEntities.forEach((entity, index) => {
-            const {id = ''} = entity
+            const { id = '' } = entity;
             if (!normalizedNodes.find((x) => x.id === id)) {
                 // reuse existing node to preserve React Flow internal state
-                const targetNode = nodes.find((x) => x.id === id)
+                const targetNode = nodes.find((x) => x.id === id);
                 if (targetNode) {
                     normalizedNodes.push({
                         ...targetNode,
@@ -72,11 +72,11 @@ const TurboFlow = (props: TurboFlowProps) => {
                             ...targetNode.data,
                             entity
                         }
-                    })
+                    });
                 } else {
                     normalizedNodes.push({
                         id,
-                        position: {x: 0, y: 0},
+                        position: { x: 0, y: 0 },
                         type: 'turbo',
                         data: {
                             entity,
@@ -87,73 +87,75 @@ const TurboFlow = (props: TurboFlowProps) => {
                                 height: 0
                             }
                         }
-                    })
+                    });
                 }
             }
-        })
+        });
 
         initialEntities.forEach((entity) => {
-            const {id = '', properties = [], relations = []} = entity
-            const schemas = [...properties, ...relations]
-            schemas.forEach(({aliasName, types}) => {
+            const { id = '', properties = [], relations = [] } = entity;
+            const schemas = [...properties, ...relations];
+            schemas.forEach(({ aliasName, types }) => {
                 types?.forEach((type) => {
                     // create edges from referenced entity types
-                    const target = initialEntities.find((x) => x.name === type)
+                    const target = initialEntities.find((x) => x.name === type);
                     if (target?.id) {
-                        const edgeId = `edge__${id}__${target.id}`
-                        const targetEdge = normalizedEdges.find((x) => x.id === edgeId)
+                        const edgeId = `edge__${id}__${target.id}`;
+                        const targetEdge = normalizedEdges.find((x) => x.id === edgeId);
                         if (targetEdge) {
                             // merge labels when multiple properties point to the same target
-                            targetEdge.label = `${targetEdge.label}、${aliasName}`
+                            targetEdge.label = `${targetEdge.label}、${aliasName}`;
                         } else {
                             normalizedEdges.push({
                                 id: edgeId,
                                 source: `${id}`,
                                 target: target.id,
                                 label: `${aliasName}`
-                            })
+                            });
                         }
                     }
-                })
-            })
-        })
+                });
+            });
+        });
         // run layout and push nodes/edges into React Flow
-        setNodes(layoutNodes({nodes: normalizedNodes, edges: normalizedEdges}))
-        setEdges([...normalizedEdges])
+        setNodes(layoutNodes({ nodes: normalizedNodes, edges: normalizedEdges }));
+        setEdges([...normalizedEdges]);
 
-        return () => window.clearTimeout(animationTimer)
-    }, [initialEntities])
+        return () => window.clearTimeout(animationTimer);
+    }, [initialEntities]);
 
     // toggle slide class on nodes during the brief animation window
     useEffect(() => {
         setNodes((currentNodes) => {
             return currentNodes.map((node) => {
-                const existing = node.className ? node.className.split(' ').filter((x) => x && x !== 'turbo-slide') : []
+                const existing = node.className
+                    ? node.className.split(' ').filter((x) => x && x !== 'turbo-slide')
+                    : [];
                 if (animateNodes) {
-                    existing.push('turbo-slide')
+                    existing.push('turbo-slide');
                 }
-                const className = existing.join(' ')
+                const className = existing.join(' ');
                 if (className === node.className) {
-                    return node
+                    return node;
                 }
                 return {
                     ...node,
                     className
-                }
-            })
-        })
-    }, [animateNodes, setNodes])
+                };
+            });
+        });
+    }, [animateNodes, setNodes]);
 
     // re-layout when DOM measurements are available
     useEffect(() => {
-        let dirty = false
+        let dirty = false;
         const newNodes = nodes.map((node) => {
             if (
                 node.measured &&
                 (node.measured.width != node.data.layout?.width || node.measured.height != node.data.layout?.height)
             ) {
                 // update node dimensions so layout can avoid overlaps
-                dirty = true
+                dirty = true;
                 return {
                     ...node,
                     data: {
@@ -164,41 +166,41 @@ const TurboFlow = (props: TurboFlowProps) => {
                             height: node.measured.height
                         }
                     }
-                }
+                };
             }
-            return node
-        })
+            return node;
+        });
 
         if (dirty) {
-            setNodes(layoutNodes({nodes: newNodes, edges}))
-            setInitialized(true)
+            setNodes(layoutNodes({ nodes: newNodes, edges }));
+            setInitialized(true);
         }
-    }, [nodes])
+    }, [nodes]);
 
     // sync external selection prop into React Flow node selection state
     useEffect(() => {
         if (initialized && reactFlow) {
             nodes.forEach((node) => {
-                const selected = !!selection.find((x) => x.id === node.id)
+                const selected = !!selection.find((x) => x.id === node.id);
                 if (node.selected !== selected) {
                     reactFlow.updateNode(node.id, {
                         selected
-                    })
+                    });
                 }
-            })
+            });
         }
-    }, [initialized, reactFlow, selection])
+    }, [initialized, reactFlow, selection]);
 
     // fit view once after initialization
     useEffect(() => {
         if (initialized && reactFlow) {
             reactFlow
                 .fitView({
-                    nodes: nodes.map(({id}) => ({id}))
+                    nodes: nodes.map(({ id }) => ({ id }))
                 })
-                .then((x) => x)
+                .then((x) => x);
         }
-    }, [initialized, reactFlow])
+    }, [initialized, reactFlow]);
 
     return (
         <div className="schema-diagram">
@@ -274,13 +276,13 @@ const TurboFlow = (props: TurboFlowProps) => {
                 </ReactFlow>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export const TurboFlowWithProvider = (props: TurboFlowProps) => {
     return (
         <ReactFlowProvider>
             <TurboFlow {...props} />
         </ReactFlowProvider>
-    )
-}
+    );
+};

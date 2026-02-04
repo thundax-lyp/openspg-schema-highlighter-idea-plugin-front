@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const PinnedIcon = () => {
     return (
@@ -12,5 +12,5 @@ export const PinnedIcon = () => {
                 />
             </g>
         </svg>
-    )
-}
+    );
+};

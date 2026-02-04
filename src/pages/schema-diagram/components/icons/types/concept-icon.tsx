@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const ConceptIcon = () => {
     return (
@@ -15,5 +15,5 @@ export const ConceptIcon = () => {
                 <polygon fill="#40B6E0" points="9 12 12 12 12 9 9 9" />
             </g>
         </svg>
-    )
-}
+    );
+};

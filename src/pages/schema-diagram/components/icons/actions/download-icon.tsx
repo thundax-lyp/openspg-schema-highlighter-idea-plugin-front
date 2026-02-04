@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const DownloadIcon = () => {
     return (
@@ -12,5 +12,5 @@ export const DownloadIcon = () => {
                 </g>
             </g>
         </svg>
-    )
-}
+    );
+};
