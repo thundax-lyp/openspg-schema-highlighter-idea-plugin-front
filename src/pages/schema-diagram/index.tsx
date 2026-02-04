@@ -44,7 +44,7 @@ const SchemaDiagramPage = () => {
      * ```js
      * window.postMessage({type: 'schema-diagram.refresh-theme'})
      * ```
-     * 2. activate entity
+     * 3. activate entity
      * ```js
      * window.postMessage({type: 'schema-diagram.activate-entity', payload: {name: 'Node1' }})
      * ```
