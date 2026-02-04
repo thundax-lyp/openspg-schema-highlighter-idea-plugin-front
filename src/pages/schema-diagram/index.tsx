@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import useDebounce from '@/hooks/use-debounce'
 import {TurboFlowWithProvider} from './components'
 import {SchemaEntity, SchemaNamespace} from './types'
@@ -24,22 +24,6 @@ const SchemaDiagramPage = () => {
         })
     }
 
-    const onRefreshCssClick = useCallback(() => {
-        service.requestCss().then((x) => {
-            setCssStyle(x)
-        })
-    }, [])
-
-    const onRefreshSchemaClick = useCallback(() => {
-        setSchemaVersion(new Date().getTime())
-    }, [])
-
-    const onActivateEntityClick = useCallback(() => {
-        // @ts-ignore
-        const currentEntities = entities.filter((x) => x.name === window['activeEntityName'])
-        setSelectedEntities([...currentEntities])
-    }, [entities])
-
     useEffect(() => {
         if (debouncedSchemaVersion > 0) {
             requestSchema()
@@ -50,6 +34,43 @@ const SchemaDiagramPage = () => {
         requestSchema()
     }, [])
 
+    /**
+     * Web Examples:
+     * 1. refresh screen
+     * ```js
+     * window.postMessage({type: 'schema-diagram.refresh'})
+     * ```
+     * 2. refresh theme
+     * ```js
+     * window.postMessage({type: 'schema-diagram.refresh-theme'})
+     * ```
+     * 2. activate entity
+     * ```js
+     * window.postMessage({type: 'schema-diagram.activate-entity', payload: {name: 'Node1' }})
+     * ```
+     */
+    useEffect(() => {
+        const handler = (event: MessageEvent) => {
+            const {type, payload = {}} = event.data;
+            if (type === 'schema-diagram.refresh') {
+                setSchemaVersion(new Date().getTime())
+
+            } else if (type === 'schema-diagram.refresh-theme') {
+                service.requestCss().then((x) => {
+                    setCssStyle(x)
+                })
+
+            } else if (type === 'schema-diagram.activate-entity') {
+                const currentEntities = entities.filter((x) => x.name === payload.name)
+                console.log(currentEntities)
+                setSelectedEntities([...currentEntities])
+            }
+        }
+
+        window.addEventListener("message", handler);
+        return () => window.removeEventListener("message", handler);
+    }, []);
+
     useEffect(() => {
         if (debouncedSelection.length > 0) {
             service.activateEntities(debouncedSelection).then(() => {
@@ -58,30 +79,9 @@ const SchemaDiagramPage = () => {
         }
     }, [debouncedSelection])
 
-    const toolbarItemStyle = {
-        padding: '8px',
-        border: 'solid 1px #00f'
-    }
-
     return (
         <>
-            <div style={{display: 'none'}}>
-                <a id="schema-diagram-refresh-css-button" onClick={() => onRefreshCssClick()} style={toolbarItemStyle}>
-                    refresh css
-                </a>
-                <a id="schema-diagram-refresh-button" onClick={() => onRefreshSchemaClick()} style={toolbarItemStyle}>
-                    refresh schema
-                </a>
-                <a
-                    id="schema-diagram-active-entity-button"
-                    onClick={() => onActivateEntityClick()}
-                    style={toolbarItemStyle}
-                >
-                    activate entity
-                </a>
-                <a style={toolbarItemStyle}>Name: {namespace?.value}</a>
-            </div>
-            <div className={styles.diagramContainer}>
+            <div className={styles.diagramContainer} data-name={namespace?.value}>
                 <TurboFlowWithProvider
                     initialEntities={entities}
                     selection={selectedEntities}
